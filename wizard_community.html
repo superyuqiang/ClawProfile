@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>巫师社区</title>
+  <title>ClawProfile</title>
   <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
   <style>
     :root {
@@ -61,114 +61,6 @@
       opacity: 0.3;
       pointer-events: none;
       z-index: 1;
-    }
-
-    /* Status Bar Placeholder */
-    .status-bar {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 12px 20px 0 20px;
-      color: #fff;
-      font-size: 14px;
-      font-weight: 600;
-      z-index: 10;
-      position: relative;
-    }
-
-    .status-right {
-      display: flex;
-      align-items: center;
-      gap: 5px;
-    }
-
-    .icon-signal {
-      display: flex;
-      align-items: flex-end;
-      gap: 2px;
-      height: 10px;
-      margin-right: 2px;
-    }
-
-    .icon-signal span {
-      width: 3px;
-      background: #fff;
-      border-radius: 1px;
-    }
-
-    .icon-signal span:nth-child(1) {
-      height: 4px;
-    }
-
-    .icon-signal span:nth-child(2) {
-      height: 6px;
-    }
-
-    .icon-signal span:nth-child(3) {
-      height: 8px;
-    }
-
-    .icon-signal span:nth-child(4) {
-      height: 10px;
-    }
-
-    .icon-wifi {
-      width: 14px;
-      height: 10px;
-      position: relative;
-      overflow: hidden;
-    }
-
-    .icon-wifi::before {
-      content: '';
-      position: absolute;
-      bottom: -5px;
-      left: 50%;
-      transform: translateX(-50%);
-      width: 20px;
-      height: 20px;
-      border-radius: 50%;
-      border: 2px solid #fff;
-      border-bottom: none;
-      border-left: none;
-      border-right: none;
-    }
-
-    .icon-wifi::after {
-      content: '';
-      position: absolute;
-      bottom: 0;
-      left: 50%;
-      transform: translateX(-50%);
-      width: 4px;
-      height: 4px;
-      border-radius: 50%;
-      background: #fff;
-    }
-
-    .icon-battery {
-      display: flex;
-      align-items: center;
-      border: 1px solid rgba(255, 255, 255, 0.4);
-      border-radius: 4px;
-      padding: 1px 2px;
-      position: relative;
-      background: rgba(255, 255, 255, 0.1);
-      font-size: 10px;
-      line-height: 1;
-      margin-left: 2px;
-      height: 14px;
-    }
-
-    .icon-battery::after {
-      content: '';
-      position: absolute;
-      right: -3px;
-      top: 3px;
-      width: 2px;
-      height: 6px;
-      background: rgba(255, 255, 255, 0.4);
-      border-radius: 0 2px 2px 0;
     }
 
     /* Nav Header */
@@ -678,13 +570,17 @@
       -webkit-overflow-scrolling: touch;
     }
     
-    /* Custom scrollbar for parchment */
+    /* Custom scrollbar for parchment — hidden until scrolling */
     .markdown-body::-webkit-scrollbar {
       width: 4px;
     }
     .markdown-body::-webkit-scrollbar-thumb {
-      background: rgba(139, 69, 19, 0.3);
+      background: transparent;
       border-radius: 4px;
+      transition: background 0.3s;
+    }
+    .markdown-body.scrolling::-webkit-scrollbar-thumb {
+      background: rgba(139, 69, 19, 0.3);
     }
 
     .markdown-body h1 {
@@ -770,7 +666,8 @@
       padding-bottom: 30px;
     }
     .markdown-editor::-webkit-scrollbar { width: 4px; }
-    .markdown-editor::-webkit-scrollbar-thumb { background: rgba(139, 69, 19, 0.3); border-radius: 4px; }
+    .markdown-editor::-webkit-scrollbar-thumb { background: transparent; border-radius: 4px; }
+    .markdown-editor.scrolling::-webkit-scrollbar-thumb { background: rgba(139, 69, 19, 0.3); }
     
     .header-edit-btn {
       position: absolute;
@@ -1000,16 +897,6 @@
 
   <div class="app-container">
 
-    <!-- Status Bar -->
-    <div class="status-bar">
-      <span>22:52</span>
-      <div class="status-right">
-        <div class="icon-signal"><span></span><span></span><span></span><span></span></div>
-        <div class="icon-wifi"></div>
-        <div class="icon-battery">58</div>
-      </div>
-    </div>
-
     <!-- Nav Header -->
     <div class="nav-header" style="justify-content: center;">
       <div class="title-wrapper">
@@ -1111,29 +998,88 @@
   <script>
     const API = window.location.origin;
 
-    const TAB_CONFIG = {
-      base:    { title: '📜 基础档案', type: 'files' },
-      persona: { title: '✨ 人设灵魂', type: 'files' },
-      diary:   { title: '📔 每日日记', type: 'diary' },
-      memory:  { title: '🧠 回忆录',   type: 'files' },
-      skills:  { title: '🪄 技能工具', type: 'skills' }
+    // ---- i18n 多语言 ----
+    const I18N = {
+      en: {
+        appTitle: 'ClawProfile',
+        tabs: { base: '📜 Base', persona: '✨ Persona', diary: '📔 Diary', memory: '🧠 Memory', skills: '🪄 Skills' },
+        navLabels: { base: 'Base', persona: 'Persona', memory: 'Memory', skills: 'Skills', diary: 'Diary' },
+        fileLabels: { 'IDENTITY.md': '📜 Identity', 'USER.md': '👨‍👩‍👧 Family', 'SOUL.md': '✨ Soul', 'AGENTS.md': '⚙️ Rules', 'MEMORY.md': '🧠 Memory', 'TOOLS.md': '🔧 Tools' },
+        edit: 'Edit', save: 'Save', cancel: 'Cancel',
+        pickerTitle: 'Choose a file to edit',
+        noSkills: 'No skills installed',
+        backToSkills: '← Back to skills',
+        editPrefix: 'Edit',
+        loadFail: 'Failed to load'
+      },
+      zh: {
+        appTitle: '龙虾档案',
+        tabs: { base: '📜 基础档案', persona: '✨ 人设灵魂', diary: '📔 每日日记', memory: '🧠 回忆录', skills: '🪄 技能工具' },
+        navLabels: { base: '基础', persona: '人设', memory: '回忆', skills: '技能', diary: '日记' },
+        fileLabels: { 'IDENTITY.md': '📜 我是谁', 'USER.md': '👨‍👩‍👧 我的家庭', 'SOUL.md': '✨ 我的性格', 'AGENTS.md': '⚙️ 我的规则', 'MEMORY.md': '🧠 我记得的事', 'TOOLS.md': '🔧 我用的工具' },
+        edit: '编辑', save: '保存', cancel: '取消',
+        pickerTitle: '选择要编辑的档案',
+        noSkills: '暂无已安装的技能',
+        backToSkills: '← 返回技能列表',
+        editPrefix: '编辑',
+        loadFail: '加载失败'
+      },
+      'zh-TW': {
+        appTitle: '龍蝦檔案',
+        tabs: { base: '📜 基礎檔案', persona: '✨ 人設靈魂', diary: '📔 每日日記', memory: '🧠 回憶錄', skills: '🪄 技能工具' },
+        navLabels: { base: '基礎', persona: '人設', memory: '回憶', skills: '技能', diary: '日記' },
+        fileLabels: { 'IDENTITY.md': '📜 我是誰', 'USER.md': '👨‍👩‍👧 我的家庭', 'SOUL.md': '✨ 我的性格', 'AGENTS.md': '⚙️ 我的規則', 'MEMORY.md': '🧠 我記得的事', 'TOOLS.md': '🔧 我用的工具' },
+        edit: '編輯', save: '儲存', cancel: '取消',
+        pickerTitle: '選擇要編輯的檔案',
+        noSkills: '尚無已安裝的技能',
+        backToSkills: '← 返回技能列表',
+        editPrefix: '編輯',
+        loadFail: '載入失敗'
+      },
+      ja: {
+        appTitle: 'ロブスターファイル',
+        tabs: { base: '📜 基本情報', persona: '✨ ペルソナ', diary: '📔 日記', memory: '🧠 記憶', skills: '🪄 スキル' },
+        navLabels: { base: '基本', persona: '人格', memory: '記憶', skills: 'スキル', diary: '日記' },
+        fileLabels: { 'IDENTITY.md': '📜 アイデンティティ', 'USER.md': '👨‍👩‍👧 ファミリー', 'SOUL.md': '✨ ソウル', 'AGENTS.md': '⚙️ ルール', 'MEMORY.md': '🧠 メモリー', 'TOOLS.md': '🔧 ツール' },
+        edit: '編集', save: '保存', cancel: 'キャンセル',
+        pickerTitle: '編集するファイルを選択',
+        noSkills: 'インストール済みスキルなし',
+        backToSkills: '← スキル一覧に戻る',
+        editPrefix: '編集',
+        loadFail: '読み込み失敗'
+      }
     };
 
-    const FILE_LABELS = {
-      'IDENTITY.md': '📜 我是谁',
-      'USER.md': '👨‍👩‍👧 我的家庭',
-      'SOUL.md': '✨ 我的性格',
-      'AGENTS.md': '⚙️ 我的规则',
-      'MEMORY.md': '🧠 我记得的事',
-      'TOOLS.md': '🔧 我用的工具'
+    function detectLang() {
+      const lang = (navigator.language || 'en').toLowerCase();
+      if (lang.startsWith('zh-tw') || lang.startsWith('zh-hant')) return 'zh-TW';
+      if (lang.startsWith('zh')) return 'zh';
+      if (lang.startsWith('ja')) return 'ja';
+      return 'en';
+    }
+
+    const LANG = detectLang();
+    const t = I18N[LANG];
+
+    // 设置页面标题
+    document.title = t.appTitle;
+
+    const TAB_CONFIG = {
+      base:    { title: t.tabs.base, type: 'files' },
+      persona: { title: t.tabs.persona, type: 'files' },
+      diary:   { title: t.tabs.diary, type: 'diary' },
+      memory:  { title: t.tabs.memory, type: 'files' },
+      skills:  { title: t.tabs.skills, type: 'skills' }
     };
+
+    const FILE_LABELS = t.fileLabels;
 
     let currentTab = 'base';
     let currentFiles = [];
     let isEditMode = false;
     let editingFileIndex = -1;
-    let skillsList = [];          // skills 列表缓存
-    let viewingSkillId = null;    // 当前查看的 skill id
+    let skillsList = [];
+    let viewingSkillId = null;
 
     const displayEl = document.getElementById('md-display');
     const editorEl = document.getElementById('md-editor');
@@ -1145,8 +1091,28 @@
     const pickerList = document.getElementById('file-picker-list');
     const pickerCancel = document.getElementById('file-picker-cancel');
 
+    // 应用多语言到 DOM
+    titleEl.textContent = t.appTitle;
+    const sideNavLabels = [t.navLabels.base, t.navLabels.persona, t.navLabels.memory, t.navLabels.skills];
+    navItems.forEach((el, i) => { el.textContent = sideNavLabels[i]; });
+    diaryBtn.textContent = t.navLabels.diary;
+    pickerCancel.textContent = t.cancel;
+    document.querySelector('.file-picker-title').textContent = t.pickerTitle;
+
     const EDIT_ICON = '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>';
     const SAVE_ICON = '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>';
+
+    // ---- 滚动条显示/隐藏 ----
+    let scrollTimer = null;
+    function setupScrollFade(el) {
+      el.addEventListener('scroll', () => {
+        el.classList.add('scrolling');
+        clearTimeout(scrollTimer);
+        scrollTimer = setTimeout(() => el.classList.remove('scrolling'), 200);
+      });
+    }
+    setupScrollFade(displayEl);
+    setupScrollFade(editorEl);
 
     // ---- API ----
     async function fetchFiles(tab) {
@@ -1186,7 +1152,7 @@
     function renderSkillsList(skills) {
       let html = '<div class="skills-list">';
       if (skills.length === 0) {
-        html += '<p style="color:#8c7355;text-align:center;padding:20px 0;">暂无已安装的咒语</p>';
+        html += `<p style="color:#8c7355;text-align:center;padding:20px 0;">${t.noSkills}</p>`;
       }
       skills.forEach(s => {
         html += `
@@ -1202,8 +1168,6 @@
       displayEl.innerHTML = html;
       displayEl.style.display = 'block';
       editorEl.style.display = 'none';
-
-      // 绑定点击事件
       displayEl.querySelectorAll('.skill-card').forEach(card => {
         card.addEventListener('click', () => openSkillDetail(card.dataset.skillId));
       });
@@ -1214,15 +1178,14 @@
       const skill = skillsList.find(s => s.id === id);
       titleEl.textContent = '🪄 ' + (skill ? skill.name : id);
       toggleBtn.style.display = 'none';
-
       try {
         const data = await fetchSkillDetail(id);
-        let html = `<div class="skill-back-btn" id="skill-back">← 返回技能列表</div>`;
+        let html = `<div class="skill-back-btn" id="skill-back">${t.backToSkills}</div>`;
         html += marked.parse(data.content);
         displayEl.innerHTML = html;
         document.getElementById('skill-back').addEventListener('click', backToSkillsList);
       } catch (e) {
-        displayEl.innerHTML = `<div class="skill-back-btn" id="skill-back">← 返回技能列表</div><p>加载失败</p>`;
+        displayEl.innerHTML = `<div class="skill-back-btn" id="skill-back">${t.backToSkills}</div><p>${t.loadFail}</p>`;
         document.getElementById('skill-back').addEventListener('click', backToSkillsList);
       }
     }
@@ -1241,16 +1204,16 @@
       editorEl.style.display = 'block';
       displayEl.style.display = 'none';
       const label = FILE_LABELS[currentFiles[fileIndex].filename] || currentFiles[fileIndex].filename;
-      toggleBtn.innerHTML = SAVE_ICON + ' 保存';
+      toggleBtn.innerHTML = SAVE_ICON + ' ' + t.save;
       toggleBtn.style.color = '#a8e6cf';
-      titleEl.textContent = '编辑 · ' + label;
+      titleEl.textContent = t.editPrefix + ' · ' + label;
     }
 
     function exitEditMode() {
       isEditMode = false;
       editingFileIndex = -1;
       renderView();
-      toggleBtn.innerHTML = EDIT_ICON + ' 编辑';
+      toggleBtn.innerHTML = EDIT_ICON + ' ' + t.edit;
       toggleBtn.style.color = '#dfcd97';
       titleEl.textContent = TAB_CONFIG[currentTab].title;
     }
@@ -1286,27 +1249,23 @@
       titleEl.textContent = TAB_CONFIG[tab].title;
       toggleBtn.style.display = 'flex';
 
-      // 更新导航高亮：4 个 nav-item 对应 base/persona/memory/skills
       const sideTabOrder = ['base', 'persona', 'memory', 'skills'];
       navItems.forEach((el, i) => {
         el.classList.toggle('active', sideTabOrder[i] === tab);
       });
-      // 日记大圆按钮高亮
       const centerBtn = document.querySelector('.nav-center-btn');
       centerBtn.classList.toggle('active-center', tab === 'diary');
 
-      // skills tab 隐藏编辑按钮（列表页不需要）
       if (tab === 'skills') {
         toggleBtn.style.display = 'none';
       } else {
-        toggleBtn.innerHTML = EDIT_ICON + ' 编辑';
+        toggleBtn.innerHTML = EDIT_ICON + ' ' + t.edit;
         toggleBtn.style.color = '#dfcd97';
       }
 
       try {
         if (tab === 'skills') {
           skillsList = await fetchSkills();
-          // skills tab 同时加载 TOOLS.md 作为 currentFiles（编辑用）
           currentFiles = await fetchFiles('skills');
           renderSkillsList(skillsList);
           return;
@@ -1317,7 +1276,7 @@
           currentFiles = await fetchFiles(tab);
         }
       } catch (e) {
-        currentFiles = [{ filename: 'error', content: `_加载失败: ${e.message}_` }];
+        currentFiles = [{ filename: 'error', content: `_${t.loadFail}: ${e.message}_` }];
       }
       renderView();
     }
@@ -1340,8 +1299,6 @@
     });
 
     // ---- 导航绑定 ----
-    // navItems 是 4 个 .nav-item: 基础、人设、回忆、技能
-    // 日记是中间大圆按钮，单独处理
     const sideTabOrder = ['base', 'persona', 'memory', 'skills'];
     navItems.forEach((el, i) => {
       el.addEventListener('click', () => switchTab(sideTabOrder[i]));
