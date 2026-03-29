@@ -890,6 +890,195 @@
       padding: 4px 0;
     }
     .skill-back-btn:active { opacity: 0.6; }
+
+    /* Profile Card Styles */
+    .profile-card {
+      text-align: center;
+      padding: 10px 0 20px;
+    }
+    .profile-emoji {
+      font-size: 52px;
+      line-height: 1;
+      margin-bottom: 8px;
+    }
+    .profile-name {
+      font-size: 22px;
+      font-weight: 800;
+      color: #2b1c11;
+      letter-spacing: 1px;
+      margin-bottom: 4px;
+    }
+    .profile-creature {
+      font-size: 14px;
+      color: #6d4c41;
+      font-style: italic;
+      margin-bottom: 12px;
+    }
+    .profile-vibe {
+      display: inline-block;
+      font-size: 13px;
+      color: #8c7355;
+      background: rgba(139, 69, 19, 0.08);
+      border: 1px solid rgba(139, 69, 19, 0.15);
+      border-radius: 20px;
+      padding: 4px 14px;
+      margin-bottom: 6px;
+    }
+    .profile-divider {
+      width: 60px;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(139, 69, 19, 0.3), transparent);
+      margin: 18px auto;
+    }
+    .profile-fields {
+      text-align: left;
+      max-width: 280px;
+      margin: 0 auto;
+    }
+    .profile-field {
+      display: flex;
+      align-items: baseline;
+      gap: 8px;
+      margin-bottom: 10px;
+      font-size: 14px;
+      color: #3e2723;
+    }
+    .profile-field-key {
+      color: #8c7355;
+      font-size: 12px;
+      min-width: 50px;
+      text-align: right;
+      flex-shrink: 0;
+    }
+    .profile-field-val {
+      color: #2b1c11;
+      font-weight: 600;
+    }
+    .profile-section-title {
+      font-size: 13px;
+      color: #8c7355;
+      letter-spacing: 1px;
+      text-align: center;
+      margin: 20px 0 12px;
+    }
+
+    /* Timeline Diary Styles */
+    .diary-timeline {
+      position: relative;
+      padding-left: 24px;
+    }
+    .diary-timeline::before {
+      content: '';
+      position: absolute;
+      left: 7px;
+      top: 8px;
+      bottom: 0;
+      width: 1.5px;
+      background: linear-gradient(180deg, rgba(139, 69, 19, 0.3) 0%, rgba(139, 69, 19, 0.05) 100%);
+    }
+    .diary-node {
+      position: relative;
+      margin-bottom: 16px;
+      cursor: pointer;
+      background: rgba(59, 40, 24, 0.04);
+      border: 1px solid rgba(139, 69, 19, 0.12);
+      border-radius: 10px;
+      padding: 12px 14px;
+      transition: all 0.15s;
+    }
+    .diary-node:active {
+      background: rgba(59, 40, 24, 0.1);
+      transform: scale(0.98);
+    }
+    .diary-node::before {
+      content: '';
+      position: absolute;
+      left: -21px;
+      top: 16px;
+      width: 9px;
+      height: 9px;
+      border-radius: 50%;
+      background: #e6dac1;
+      border: 2px solid #b09872;
+      z-index: 1;
+    }
+    .diary-node:first-child::before {
+      background: #c59b4c;
+      border-color: #a07830;
+      box-shadow: 0 0 6px rgba(197, 155, 76, 0.4);
+    }
+    .diary-date {
+      font-size: 12px;
+      color: #8c7355;
+      font-weight: 600;
+      letter-spacing: 0.5px;
+      margin-bottom: 6px;
+    }
+    .diary-node:first-child .diary-date {
+      color: #6d4c41;
+    }
+    .diary-summary {
+      font-size: 13px;
+      color: #3e2723;
+      line-height: 1.6;
+      display: -webkit-box;
+      -webkit-line-clamp: 3;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+    .diary-arrow {
+      position: absolute;
+      right: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: #b09872;
+      font-size: 14px;
+      opacity: 0.5;
+    }
+    .diary-origin {
+      position: relative;
+      text-align: center;
+      padding: 16px 0 8px;
+      color: #b09872;
+      font-size: 12px;
+      font-style: italic;
+      letter-spacing: 0.5px;
+    }
+    .diary-origin::before {
+      content: '';
+      position: absolute;
+      left: 5px;
+      top: 0;
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: rgba(139, 69, 19, 0.15);
+      border: 1.5px solid rgba(139, 69, 19, 0.2);
+    }
+    .diary-empty {
+      text-align: center;
+      padding: 40px 0;
+      color: #8c7355;
+      font-size: 14px;
+      font-style: italic;
+    }
+    .diary-detail-date {
+      font-size: 12px;
+      color: #8c7355;
+      margin-bottom: 12px;
+      letter-spacing: 0.5px;
+    }
+    .diary-back-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      color: #8c7355;
+      font-size: 13px;
+      cursor: pointer;
+      margin-bottom: 12px;
+      padding: 4px 0;
+    }
+    .diary-back-btn:active { opacity: 0.6; }
   </style>
 </head>
 
@@ -1009,6 +1198,9 @@
         pickerTitle: 'Choose a file to edit',
         noSkills: 'No skills installed',
         backToSkills: '← Back to skills',
+        noDiary: 'No diary entries yet',
+        backToDiary: '← Back to timeline',
+        diaryOrigin: 'Where it all began',
         editPrefix: 'Edit',
         loadFail: 'Failed to load'
       },
@@ -1021,6 +1213,9 @@
         pickerTitle: '选择要编辑的档案',
         noSkills: '暂无已安装的技能',
         backToSkills: '← 返回技能列表',
+        noDiary: '还没有日记',
+        backToDiary: '← 返回时间轴',
+        diaryOrigin: '一切从这里开始',
         editPrefix: '编辑',
         loadFail: '加载失败'
       },
@@ -1033,6 +1228,9 @@
         pickerTitle: '選擇要編輯的檔案',
         noSkills: '尚無已安裝的技能',
         backToSkills: '← 返回技能列表',
+        noDiary: '還沒有日記',
+        backToDiary: '← 返回時間軸',
+        diaryOrigin: '一切從這裡開始',
         editPrefix: '編輯',
         loadFail: '載入失敗'
       },
@@ -1045,6 +1243,9 @@
         pickerTitle: '編集するファイルを選択',
         noSkills: 'インストール済みスキルなし',
         backToSkills: '← スキル一覧に戻る',
+        noDiary: '日記はまだありません',
+        backToDiary: '← タイムラインに戻る',
+        diaryOrigin: 'すべてはここから始まった',
         editPrefix: '編集',
         loadFail: '読み込み失敗'
       }
@@ -1080,6 +1281,7 @@
     let editingFileIndex = -1;
     let skillsList = [];
     let viewingSkillId = null;
+    let viewingDiaryIndex = -1;  // 当前查看的日记索引
 
     const displayEl = document.getElementById('md-display');
     const editorEl = document.getElementById('md-editor');
@@ -1142,11 +1344,199 @@
     }
 
     // ---- 渲染 ----
+    // ---- 从 markdown 提取 **Key:** Value 字段 ----
+    function extractFields(md) {
+      const fields = {};
+      // 匹配两种格式：
+      // 1) - **Key:** Value (单行)
+      // 2) - **Key:**\n  Value (多行，缩进)
+      const regex = /[-*]\s*\*\*(.+?):\*\*\s*\n?\s*(.+)/g;
+      let m;
+      while ((m = regex.exec(md)) !== null) {
+        const key = m[1].trim();
+        let val = m[2].trim();
+        // 跳过未填写的占位符
+        if (val.startsWith('_(') || val === '') continue;
+        fields[key.toLowerCase()] = { key, val };
+      }
+      return fields;
+    }
+
+    // ---- 卡片渲染：基础 tab 专用 ----
+    function renderProfileCard(identityMd, userMd) {
+      const id = extractFields(identityMd);
+      const usr = extractFields(userMd);
+
+      // 至少要提取到 2 个字段才渲染卡片，否则 fallback
+      const totalFields = Object.keys(id).length + Object.keys(usr).length;
+      if (totalFields < 2) return null;
+
+      let html = '<div class="profile-card">';
+
+      // Emoji
+      if (id.emoji) {
+        html += `<div class="profile-emoji">${id.emoji.val}</div>`;
+      }
+
+      // Name
+      if (id.name) {
+        html += `<div class="profile-name">${id.name.val}</div>`;
+      }
+
+      // Creature
+      if (id.creature) {
+        html += `<div class="profile-creature">${id.creature.val}</div>`;
+      }
+
+      // Vibe
+      if (id.vibe) {
+        html += `<div class="profile-vibe">${id.vibe.val}</div>`;
+      }
+
+      // 分隔线 + User 信息
+      const userFields = Object.values(usr);
+      if (userFields.length > 0) {
+        html += '<div class="profile-divider"></div>';
+        html += `<div class="profile-section-title">${t.fileLabels['USER.md'] || 'Family'}</div>`;
+        html += '<div class="profile-fields">';
+        userFields.forEach(f => {
+          html += `<div class="profile-field">
+            <span class="profile-field-key">${f.key}</span>
+            <span class="profile-field-val">${f.val}</span>
+          </div>`;
+        });
+        html += '</div>';
+      }
+
+      html += '</div>';
+      return html;
+    }
+
     function renderView() {
+      // 基础 tab 尝试卡片渲染
+      if (currentTab === 'base' && currentFiles.length === 2) {
+        const cardHtml = renderProfileCard(currentFiles[0].content, currentFiles[1].content);
+        if (cardHtml) {
+          displayEl.innerHTML = cardHtml;
+          displayEl.style.display = 'block';
+          editorEl.style.display = 'none';
+          return;
+        }
+      }
+      // 日记 tab 用时间轴渲染
+      if (currentTab === 'diary') {
+        renderDiaryTimeline();
+        return;
+      }
+      // fallback: 普通 markdown 渲染
       const combined = currentFiles.map(f => f.content).join('\n\n---\n\n');
       displayEl.innerHTML = marked.parse(combined);
       displayEl.style.display = 'block';
       editorEl.style.display = 'none';
+    }
+
+    // ---- 日记：从文件名提取日期并格式化 ----
+    function formatDiaryDate(filename) {
+      const match = filename.match(/(\d{4})-(\d{2})-(\d{2})/);
+      if (!match) return filename.replace('.md', '');
+      const [, y, m, d] = match;
+      const date = new Date(y, m - 1, d);
+      const today = new Date();
+      const yesterday = new Date(today);
+      yesterday.setDate(today.getDate() - 1);
+
+      const isToday = date.toDateString() === today.toDateString();
+      const isYesterday = date.toDateString() === yesterday.toDateString();
+
+      const weekdays = {
+        en: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'],
+        zh: ['周日', '周一', '周二', '周三', '周四', '周五', '周六'],
+        'zh-TW': ['週日', '週一', '週二', '週三', '週四', '週五', '週六'],
+        ja: ['日', '月', '火', '水', '木', '金', '土']
+      };
+      const todayLabel = { en: 'Today', zh: '今天', 'zh-TW': '今天', ja: '今日' };
+      const yesterdayLabel = { en: 'Yesterday', zh: '昨天', 'zh-TW': '昨天', ja: '昨日' };
+
+      const wd = (weekdays[LANG] || weekdays.en)[date.getDay()];
+      let label = `${y}-${m}-${d}  ${wd}`;
+      if (isToday) label = `${todayLabel[LANG] || 'Today'}  ${m}-${d}`;
+      else if (isYesterday) label = `${yesterdayLabel[LANG] || 'Yesterday'}  ${m}-${d}`;
+      return label;
+    }
+
+    // ---- 日记：提取摘要（跳过标题和空行，取前两行有意义的文字）----
+    function extractDiarySummary(content) {
+      const lines = content.split('\n');
+      const meaningful = [];
+      for (const line of lines) {
+        const trimmed = line.trim();
+        if (!trimmed) continue;
+        if (trimmed.startsWith('#')) continue;
+        if (trimmed.startsWith('---')) continue;
+        meaningful.push(trimmed);
+        if (meaningful.length >= 2) break;
+      }
+      return meaningful.join(' ') || '...';
+    }
+
+    // ---- 日记：时间轴列表 ----
+    function renderDiaryTimeline() {
+      viewingDiaryIndex = -1;
+      toggleBtn.style.display = 'none';
+
+      if (currentFiles.length === 0) {
+        displayEl.innerHTML = `<div class="diary-empty">${t.noDiary}</div>`;
+        displayEl.style.display = 'block';
+        editorEl.style.display = 'none';
+        return;
+      }
+
+      let html = '<div class="diary-timeline">';
+      currentFiles.forEach((f, i) => {
+        const dateLabel = formatDiaryDate(f.filename);
+        const summary = extractDiarySummary(f.content);
+        html += `
+          <div class="diary-node" data-index="${i}">
+            <div class="diary-date">${dateLabel}</div>
+            <div class="diary-summary">${summary}</div>
+            <div class="diary-arrow">›</div>
+          </div>`;
+      });
+      // 底部起点标记
+      html += `<div class="diary-origin">${t.diaryOrigin}</div>`;
+      html += '</div>';
+
+      displayEl.innerHTML = html;
+      displayEl.style.display = 'block';
+      editorEl.style.display = 'none';
+
+      displayEl.querySelectorAll('.diary-node').forEach(node => {
+        node.addEventListener('click', () => openDiaryDetail(parseInt(node.dataset.index)));
+      });
+    }
+
+    // ---- 日记：详情页 ----
+    function openDiaryDetail(index) {
+      viewingDiaryIndex = index;
+      const file = currentFiles[index];
+      const dateLabel = formatDiaryDate(file.filename);
+      titleEl.textContent = '📔 ' + dateLabel;
+      toggleBtn.style.display = 'flex';
+      toggleBtn.innerHTML = EDIT_ICON + ' ' + t.edit;
+      toggleBtn.style.color = '#dfcd97';
+
+      let html = `<div class="diary-back-btn" id="diary-back">${t.backToDiary}</div>`;
+      html += `<div class="diary-detail-date">${dateLabel}</div>`;
+      html += marked.parse(file.content);
+      displayEl.innerHTML = html;
+
+      document.getElementById('diary-back').addEventListener('click', backToDiaryTimeline);
+    }
+
+    function backToDiaryTimeline() {
+      viewingDiaryIndex = -1;
+      titleEl.textContent = TAB_CONFIG.diary.title;
+      renderDiaryTimeline();
     }
 
     function renderSkillsList(skills) {
@@ -1212,6 +1602,11 @@
     function exitEditMode() {
       isEditMode = false;
       editingFileIndex = -1;
+      // 日记详情页编辑完回到详情页，不是回到时间轴
+      if (currentTab === 'diary' && viewingDiaryIndex >= 0) {
+        openDiaryDetail(viewingDiaryIndex);
+        return;
+      }
       renderView();
       toggleBtn.innerHTML = EDIT_ICON + ' ' + t.edit;
       toggleBtn.style.color = '#dfcd97';
@@ -1246,6 +1641,7 @@
       if (isEditMode) return;
       currentTab = tab;
       viewingSkillId = null;
+      viewingDiaryIndex = -1;
       titleEl.textContent = TAB_CONFIG[tab].title;
       toggleBtn.style.display = 'flex';
 
@@ -1284,6 +1680,11 @@
     // ---- 编辑/保存按钮 ----
     toggleBtn.addEventListener('click', async () => {
       if (!isEditMode) {
+        // 日记详情页：直接编辑当前日记
+        if (currentTab === 'diary' && viewingDiaryIndex >= 0) {
+          enterEditMode(viewingDiaryIndex);
+          return;
+        }
         if (currentFiles.length > 1) {
           showFilePicker();
         } else if (currentFiles.length === 1) {
