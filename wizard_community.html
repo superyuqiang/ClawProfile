@@ -351,8 +351,8 @@
       z-index: 50;
       display: flex;
       justify-content: space-between;
-      align-items: center;
-      padding: 0 10px;
+      align-items: flex-start;
+      padding: 10px 10px 0 10px;
     }
 
     /* The Leather Flaps creating the slanted V-edge holding the paper */
@@ -361,9 +361,12 @@
       width: 55%;
       height: 100px;
       bottom: -20px;
-      background: linear-gradient(180deg, #322118 0%, #0a0503 100%);
-      border-top: 1.5px solid rgba(180, 140, 100, 0.4);
-      box-shadow: 0 -8px 25px rgba(0, 0, 0, 0.85);
+      background: 
+        linear-gradient(180deg, rgba(35, 22, 16, 0.95) 0%, rgba(10, 6, 4, 1) 100%),
+        url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100"><filter id="noise"><feTurbulence type="fractalNoise" baseFrequency="0.8" numOctaves="4" stitchTiles="stitch"/></filter><rect width="100" height="100" filter="url(%23noise)" opacity="0.15" mix-blend-mode="multiply"/></svg>');
+      background-blend-mode: overlay;
+      border-top: 1.5px solid rgba(130, 95, 65, 0.5);
+      box-shadow: 0 -10px 30px rgba(0, 0, 0, 0.95);
       z-index: -1;
     }
 
@@ -382,10 +385,10 @@
     .nav-item {
       flex: 1;
       text-align: center;
-      color: #9c9085;
+      color: #8a7a6a;
       font-size: 13px;
       font-weight: 500;
-      letter-spacing: 1px;
+      letter-spacing: 1.5px;
       position: relative;
       padding-bottom: 0;
       cursor: pointer;
@@ -393,9 +396,21 @@
     }
 
     .nav-item.active {
-      color: #f3e5c8;
+      color: #fff2cc;
       font-weight: 600;
-      text-shadow: 0 0 12px rgba(243, 229, 200, 0.6), 0 0 4px rgba(220, 200, 150, 0.4);
+      text-shadow: 0 0 4px rgba(0, 0, 0, 0.8);
+    }
+    
+    .nav-item.active::before {
+      content: '';
+      position: absolute;
+      top: 50%; left: 50%;
+      width: 45px; height: 16px;
+      transform: translate(-50%, -50%);
+      background: radial-gradient(ellipse at center, rgba(230, 180, 50, 0.45) 0%, rgba(200, 150, 20, 0.1) 50%, transparent 70%);
+      filter: blur(3px);
+      z-index: -1;
+      pointer-events: none;
     }
 
     .nav-center-wrapper {
@@ -409,37 +424,72 @@
 
     .nav-center-btn {
       position: absolute;
-      top: -22px;
-      width: 64px;
-      height: 64px;
-      border-radius: 50%;
-      background: radial-gradient(circle at center, #2e2017 40%, #110805 100%);
+      top: -24px;
+      width: 66px;
+      height: 66px;
+      border-radius: 46% 54% 50% 50% / 52% 50% 50% 48%;
+      background: radial-gradient(circle at 35% 35%, #b22222 0%, #8b0000 40%, #5c0000 80%, #2f0000 100%);
       box-shadow:
-        0 -4px 15px rgba(0, 0, 0, 0.9),
-        inset 0 0 8px rgba(255, 255, 255, 0.05),
-        0 0 20px rgba(200, 180, 140, 0.15);
-      border: 2.5px solid #6b583f;
-      border-top-color: #a49174;
+        0 6px 15px rgba(0, 0, 0, 0.7),
+        inset 3px 6px 8px rgba(255, 255, 255, 0.25),
+        inset -3px -6px 12px rgba(0, 0, 0, 0.6),
+        2px -1px 0 1px #800000,
+        -1px 2px 0 1px #3a0000;
       display: flex;
       justify-content: center;
       align-items: center;
+      cursor: pointer;
+      z-index: 70;
+      border: none;
+      transition: filter 0.2s;
     }
 
-    /* Inner decorative dashed ring */
     .nav-center-btn::before {
       content: '';
       position: absolute;
-      inset: 4px;
-      border-radius: 50%;
-      border: 1px dashed rgba(200, 180, 140, 0.25);
+      inset: 8px;
+      border-radius: 48% 52% 49% 51% / 50% 49% 51% 50%;
+      background: radial-gradient(circle at center, #3d0000 0%, #680000 100%);
+      box-shadow: 
+        inset 0 4px 6px rgba(0, 0, 0, 0.8),
+        0 1px 1px rgba(255, 255, 255, 0.2);
+      pointer-events: none;
+    }
+    
+    .nav-center-btn::after {
+       content: '';
+       position: absolute;
+       inset: -2px;
+       border-radius: 52% 48% 53% 47% / 48% 53% 47% 52%;
+       background: transparent;
+       box-shadow: 
+         5px 5px 0 -2px rgba(100,0,0,0.5),
+         -4px -2px 0 -1.5px rgba(139,0,0,0.6);
+       pointer-events: none;
+       z-index: -1;
     }
 
     .nav-center-btn.active-center {
       box-shadow:
-        0 -4px 15px rgba(0, 0, 0, 0.9),
-        inset 0 0 8px rgba(255, 255, 255, 0.05),
-        0 0 30px rgba(220, 200, 150, 0.4);
-      border-color: #c8b48c;
+        0 4px 25px rgba(255, 100, 50, 0.5),
+        inset 3px 6px 8px rgba(255, 255, 255, 0.25),
+        inset -3px -6px 12px rgba(0, 0, 0, 0.6);
+      filter: brightness(1.1);
+    }
+
+    .icon-diary {
+      position: relative;
+      z-index: 2;
+      color: #eedc9a; /* Gold foil look */
+      font-size: 16px;
+      font-family: "Georgia", serif;
+      font-weight: 900;
+      letter-spacing: 2px;
+      /* Engraved text effect */
+      text-shadow: 
+        0 -1px 1px rgba(0, 0, 0, 0.8),
+        0 1px 1px rgba(255, 255, 255, 0.3);
+      transform: translateX(1px); /* optical alignment due to letter-spacing */
     }
 
     /* Paper airplane icon */
@@ -860,6 +910,7 @@
       text-align: center;
       padding: 10px 0 20px;
     }
+
     .profile-emoji {
       font-size: 52px;
       line-height: 1;
@@ -924,6 +975,29 @@
       letter-spacing: 1px;
       text-align: center;
       margin: 20px 0 12px;
+    }
+
+    /* Magic Card Layout for Markdown Content */
+    .magic-card {
+      padding: 0 0 25px 0;
+      margin-bottom: 25px;
+      position: relative;
+    }
+    .magic-card:not(:last-child)::after {
+      content: '';
+      position: absolute;
+      bottom: 0; left: 10%; right: 10%;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(139, 69, 19, 0.25), transparent);
+    }
+    .magic-card-title {
+      font-size: 14px;
+      color: #7b5f4d;
+      letter-spacing: 2px;
+      text-align: center;
+      margin-bottom: 12px;
+      font-weight: 700;
+      text-transform: uppercase;
     }
 
     /* Timeline Diary Styles */
@@ -1134,10 +1208,7 @@
         <div class="nav-item">人设</div>
         <div class="nav-center-wrapper">
           <div class="nav-center-btn">
-            <div class="icon-diary"
-              style="color: #fcf6ec; font-size: 18px; font-weight: 700; letter-spacing: 2px; text-shadow: 0 4px 6px rgba(0,0,0,1); transform: translateY(-2px);">
-              日记
-            </div>
+            <div class="icon-diary">日记</div>
           </div>
         </div>
         <div class="nav-item active">回忆</div>
@@ -1391,9 +1462,19 @@
         renderDiaryTimeline();
         return;
       }
-      // fallback: 普通 markdown 渲染
-      const combined = currentFiles.map(f => f.content).join('\n\n---\n\n');
-      displayEl.innerHTML = marked.parse(combined);
+      // fallback: 魔法卷轴式卡片渲染
+      let html = '';
+      currentFiles.forEach(f => {
+        let label = FILE_LABELS[f.filename] || f.filename;
+        let contentHtml = marked.parse(f.content);
+        html += `
+          <div class="magic-card">
+            <div class="magic-card-title">${label}</div>
+            <div class="magic-card-content">${contentHtml}</div>
+          </div>
+        `;
+      });
+      displayEl.innerHTML = html;
       displayEl.style.display = 'block';
       editorEl.style.display = 'none';
     }
@@ -1600,6 +1681,21 @@
     });
 
     // ---- Tab 切换 ----
+    // ---- 数据缓存 ----
+    const cache = {};
+
+    async function preloadAll() {
+      const tabs = ['base', 'persona', 'memory', 'skills'];
+      const promises = tabs.map(tab => fetchFiles(tab).then(data => { cache[tab] = data; }));
+      promises.push(fetchDiaries().then(data => { cache.diary = data; }));
+      promises.push(fetchSkills().then(data => { cache._skills = data; }));
+      await Promise.all(promises);
+    }
+
+    function invalidateCache(tab) {
+      delete cache[tab];
+    }
+
     async function switchTab(tab) {
       if (isEditMode) return;
       currentTab = tab;
@@ -1624,15 +1720,15 @@
 
       try {
         if (tab === 'skills') {
-          skillsList = await fetchSkills();
-          currentFiles = await fetchFiles('skills');
+          skillsList = cache._skills || await fetchSkills();
+          currentFiles = cache.skills || await fetchFiles('skills');
           renderSkillsList(skillsList);
           return;
         }
         if (TAB_CONFIG[tab].type === 'diary') {
-          currentFiles = await fetchDiaries();
+          currentFiles = cache.diary || await fetchDiaries();
         } else {
-          currentFiles = await fetchFiles(tab);
+          currentFiles = cache[tab] || await fetchFiles(tab);
         }
       } catch (e) {
         currentFiles = [{ filename: 'error', content: `_${t.loadFail}: ${e.message}_` }];
@@ -1643,7 +1739,6 @@
     // ---- 编辑/保存按钮 ----
     toggleBtn.addEventListener('click', async () => {
       if (!isEditMode) {
-        // 日记详情页：直接编辑当前日记
         if (currentTab === 'diary' && viewingDiaryIndex >= 0) {
           enterEditMode(viewingDiaryIndex);
           return;
@@ -1658,6 +1753,8 @@
         file.content = editorEl.value;
         const isDiary = TAB_CONFIG[currentTab].type === 'diary';
         await saveFile(file.filename, file.content, isDiary);
+        // 保存后清除对应缓存，下次切换会重新加载
+        invalidateCache(currentTab);
         exitEditMode();
       }
     });
@@ -1669,8 +1766,8 @@
     });
     diaryBtn.addEventListener('click', () => switchTab('diary'));
 
-    // ---- 初始加载 ----
-    switchTab('base');
+    // ---- 初始加载：预加载所有数据 ----
+    preloadAll().then(() => switchTab('base'));
   </script>
 </body>
 
