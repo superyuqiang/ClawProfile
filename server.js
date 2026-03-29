@@ -13,6 +13,11 @@ app.use(cors());
 app.use(express.json());
 app.use(express.static(__dirname)); // 托管前端 HTML
 
+// 根路径重定向到主页面
+app.get('/', (req, res) => {
+  res.redirect('/wizard_community.html');
+});
+
 // Tab 与文件的映射
 const TAB_FILES = {
   base: ['IDENTITY.md', 'USER.md'],
