@@ -1,0 +1,11 @@
+{
+  "name": "ClawProfile",
+  "tagline": "Manage your OpenClaw's memory, identity & skills from your phone",
+  "description": "One-click launch a mobile-friendly web app to remotely view and edit your OpenClaw's identity, personality, memory, rules, skills and diary files. Served via Cloudflare Tunnel for instant phone access.",
+  "category": "productivity",
+  "tags": ["openclaw", "dashboard", "markdown", "mobile", "cloudflare-tunnel", "profile"],
+  "version": "1.0.0",
+  "license": "MIT",
+  "pricing": "free",
+  "homepage": "https://github.com/superyuqiang/ClawProfile"
+}

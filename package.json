@@ -1,0 +1,14 @@
+{
+  "name": "clawprofile",
+  "version": "1.0.0",
+  "description": "ClawProfile — Manage your OpenClaw's memory, identity & skills from your phone",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "express": "^4.21.0",
+    "cors": "^2.8.5"
+  },
+  "license": "MIT"
+}
