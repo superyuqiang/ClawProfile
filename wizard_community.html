@@ -2138,11 +2138,11 @@
       }
     }
 
-    async function switchTab(tab) {
+    async function switchTab(tab, skipAnimation = false) {
       if (isEditMode) return;
       if (currentTab === tab && viewingSkillId === null && viewingDiaryIndex === -1 && tab !== 'diary') return;
 
-      await flipPageSequence(async () => {
+      const task = async () => {
         currentTab = tab;
         viewingSkillId = null;
         viewingDiaryIndex = -1;
@@ -2182,7 +2182,8 @@
           currentFiles = [{ filename: 'error', content: `_${t.loadFail}: ${e.message}_` }];
         }
         renderView();
-      });
+      };
+      if (skipAnimation) { await task(); } else { await flipPageSequence(task); }
     }
 
     // ---- 编辑/保存按钮 ----
@@ -2252,10 +2253,11 @@
     const loadingText = document.getElementById('loading-text');
     loadingText.textContent = t.loading;
 
-    preloadAll()
-      .catch(() => {})
-      .then(() => {
-        switchTab('base');
+    const minLoadTime = new Promise(r => setTimeout(r, 800));
+
+    Promise.all([preloadAll().catch(() => {}), minLoadTime])
+      .then(async () => {
+        await switchTab('base', true);
         loadingScreen.classList.add('fade-out');
         setTimeout(() => loadingScreen.remove(), 500);
       });
