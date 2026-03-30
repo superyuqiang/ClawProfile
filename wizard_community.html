@@ -1699,7 +1699,7 @@
     titleEl.textContent = t.appTitle;
     const sideNavLabels = [t.navLabels.base, t.navLabels.persona, t.navLabels.memory, t.navLabels.skills];
     navItems.forEach((el, i) => { el.textContent = sideNavLabels[i]; });
-    diaryBtn.textContent = t.navLabels.diary;
+    document.querySelector('.icon-diary').textContent = t.navLabels.diary;
     pickerCancel.textContent = t.cancel;
     document.querySelector('.file-picker-title').textContent = t.pickerTitle;
 
