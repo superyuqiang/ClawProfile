@@ -1559,7 +1559,7 @@
             <div class="icon-diary">日记</div>
           </div>
         </div>
-        <div class="nav-item active">回忆</div>
+        <div class="nav-item">回忆</div>
         <div class="nav-item">技能</div>
       </div>
     </div>
@@ -2247,17 +2247,18 @@
       switchTab('diary');
     });
 
-    // ---- 初始加载：预加载所有数据 ----
     // ---- 初始加载：loading 页面 + 预加载所有数据 ----
     const loadingScreen = document.getElementById('loading-screen');
     const loadingText = document.getElementById('loading-text');
     loadingText.textContent = t.loading;
 
-    preloadAll().then(() => {
-      switchTab('base');
-      loadingScreen.classList.add('fade-out');
-      setTimeout(() => loadingScreen.remove(), 500);
-    });
+    preloadAll()
+      .catch(() => {})
+      .then(() => {
+        switchTab('base');
+        loadingScreen.classList.add('fade-out');
+        setTimeout(() => loadingScreen.remove(), 500);
+      });
   </script>
 </body>
 
