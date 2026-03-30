@@ -1220,6 +1220,27 @@
         inset 0 0 4px rgba(158, 26, 22, 0.2),
         0 0 4px rgba(158, 26, 22, 0.1);
       border-style: ridge;
+      max-width: 80%;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+    .profile-creature.long-text {
+      border: none;
+      box-shadow: none;
+      border-style: none;
+      transform: none;
+      font-size: 13px;
+      font-weight: normal;
+      color: #6d4c41;
+      font-style: italic;
+      letter-spacing: 0.5px;
+      text-transform: none;
+      white-space: normal;
+      overflow: visible;
+      text-overflow: unset;
+      padding: 0;
+      max-width: 85%;
     }
 
     .profile-vibe {
@@ -1253,6 +1274,25 @@
       display: inline-block;
       position: relative;
       top: -14px;
+    }
+
+    /* Empty profile state */
+    .profile-empty {
+      text-align: center;
+      padding: 40px 20px;
+    }
+    .profile-empty-icon {
+      font-size: 48px;
+      margin-bottom: 16px;
+      opacity: 0.6;
+    }
+    .profile-empty-text {
+      font-size: 14px;
+      color: #8c7355;
+      line-height: 1.7;
+      font-style: italic;
+      max-width: 260px;
+      margin: 0 auto;
     }
 
     .profile-divider {
@@ -1594,7 +1634,8 @@
         diaryReadMore: 'Read full entry →',
         editPrefix: 'Edit',
         loadFail: 'Failed to load',
-        loading: 'Opening the archive...'
+        loading: 'Opening the archive...',
+        emptyProfile: 'Your lobster hasn\'t filled in its profile yet. Chat with it and ask it to introduce itself!'
       },
       zh: {
         appTitle: '龙虾档案',
@@ -1611,7 +1652,8 @@
         diaryReadMore: '阅读全文 →',
         editPrefix: '编辑',
         loadFail: '加载失败',
-        loading: '正在翻开档案...'
+        loading: '正在翻开档案...',
+        emptyProfile: '你的龙虾还没填写档案呢，跟它聊聊让它自我介绍一下吧！'
       },
       'zh-TW': {
         appTitle: '龍蝦檔案',
@@ -1628,7 +1670,8 @@
         diaryReadMore: '閱讀全文 →',
         editPrefix: '編輯',
         loadFail: '載入失敗',
-        loading: '正在翻開檔案...'
+        loading: '正在翻開檔案...',
+        emptyProfile: '你的龍蝦還沒填寫檔案呢，跟它聊聊讓它自我介紹一下吧！'
       },
       ja: {
         appTitle: 'ClawProfile',
@@ -1645,7 +1688,8 @@
         diaryReadMore: '全文を読む →',
         editPrefix: '編集',
         loadFail: '読み込み失敗',
-        loading: 'アーカイブを開いています...'
+        loading: 'アーカイブを開いています...',
+        emptyProfile: 'あなたのロブスターはまだプロフィールを書いていません。話しかけて自己紹介してもらいましょう！'
       }
     };
 
@@ -1792,9 +1836,10 @@
         html += `<div class="profile-name">${id.name.val}</div>`;
       }
 
-      // Creature as Stamp
+      // Creature as Stamp (short) or italic text (long)
       if (id.creature) {
-        html += `<div><div class="profile-creature">${id.creature.val}</div></div>`;
+        const isLong = id.creature.val.length > 15;
+        html += `<div><div class="profile-creature${isLong ? ' long-text' : ''}">${id.creature.val}</div></div>`;
       }
 
       // Vibe
@@ -1834,6 +1879,15 @@
           editorEl.style.display = 'none';
           return;
         }
+        // 卡片提取失败 → 显示空状态引导
+        displayEl.innerHTML = `
+          <div class="profile-empty">
+            <div class="profile-empty-icon">🦞</div>
+            <div class="profile-empty-text">${t.emptyProfile}</div>
+          </div>`;
+        displayEl.style.display = 'block';
+        editorEl.style.display = 'none';
+        return;
       }
       // 日记 tab 用时间轴渲染
       if (currentTab === 'diary') {
