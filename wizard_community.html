@@ -1690,6 +1690,7 @@
     const titleEl = document.querySelector('.nav-title');
     const navItems = document.querySelectorAll('.nav-item');
     const diaryBtn = document.querySelector('.nav-center-wrapper');
+    const centerBtn = document.querySelector('.nav-center-btn');
     const pickerOverlay = document.getElementById('file-picker');
     const pickerList = document.getElementById('file-picker-list');
     const pickerCancel = document.getElementById('file-picker-cancel');
@@ -2169,7 +2170,6 @@
         navItems.forEach((el, i) => {
           el.classList.toggle('active', sideTabOrder[i] === tab);
         });
-        const centerBtn = document.querySelector('.nav-center-btn');
         centerBtn.classList.toggle('active-center', tab === 'diary');
 
         if (tab === 'skills') {
@@ -2253,10 +2253,9 @@
       el.addEventListener('click', () => switchTab(sideTabOrder[i]));
     });
     diaryBtn.addEventListener('click', () => {
-      const btn = document.querySelector('.nav-center-btn');
       const ripple = document.createElement('div');
       ripple.className = 'magic-ripple';
-      btn.appendChild(ripple);
+      centerBtn.appendChild(ripple);
       setTimeout(() => ripple.remove(), 600);
       switchTab('diary');
     });
