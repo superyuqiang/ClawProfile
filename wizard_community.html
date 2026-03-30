@@ -1877,8 +1877,8 @@
     }
 
     // ---- 日记：详情页 ----
-    async function openDiaryDetail(index) {
-      await flipPageSequence(async () => {
+    async function openDiaryDetail(index, skipAnimation = false) {
+      const task = async () => {
         viewingDiaryIndex = index;
         const file = currentFiles[index];
         const dateLabel = formatDiaryDate(file.filename);
@@ -1894,7 +1894,8 @@
         let html = `<div class="diary-detail-date">${dateLabel}</div>`;
         html += marked.parse(file.content);
         displayEl.innerHTML = html;
-      });
+      };
+      if (skipAnimation) { await task(); } else { await flipPageSequence(task); }
     }
 
     async function backToDiaryTimeline() {
@@ -1942,8 +1943,8 @@
       return res.json();
     }
 
-    async function openSkillDetail(id) {
-      await flipPageSequence(async () => {
+    async function openSkillDetail(id, skipAnimation = false) {
+      const task = async () => {
         viewingSkillId = id;
         const skill = skillsList.find(s => s.id === id);
         titleEl.textContent = '🪄 ' + (skill ? skill.name : id);
@@ -1963,7 +1964,8 @@
           skillDetailContent = '';
           displayEl.innerHTML = `<p>${t.loadFail}</p>`;
         }
-      });
+      };
+      if (skipAnimation) { await task(); } else { await flipPageSequence(task); }
     }
 
     async function backToSkillsList() {
@@ -2002,12 +2004,12 @@
       displayEl.style.display = 'block';
       // Skill 详情页编辑取消，回到详情页
       if (currentTab === 'skills' && viewingSkillId) {
-        openSkillDetail(viewingSkillId);
+        openSkillDetail(viewingSkillId, true);
         return;
       }
       // 日记详情页编辑取消，回到详情页
       if (currentTab === 'diary' && viewingDiaryIndex >= 0) {
-        openDiaryDetail(viewingDiaryIndex);
+        openDiaryDetail(viewingDiaryIndex, true);
         return;
       }
       renderView();
@@ -2169,7 +2171,7 @@
           isEditMode = false;
           appContainer.classList.remove('is-editing');
           cancelBtn.style.display = 'none';
-          openSkillDetail(viewingSkillId);
+          openSkillDetail(viewingSkillId, true);
           return;
         }
         const file = currentFiles[editingFileIndex];
