@@ -1986,6 +1986,7 @@
       displayEl.style.display = 'none';
       cancelBtn.innerHTML = CANCEL_ICON;
       cancelBtn.style.display = 'flex';
+      backBtn.style.display = 'none';
       const label = FILE_LABELS[currentFiles[fileIndex].filename] || currentFiles[fileIndex].filename;
       toggleBtn.innerHTML = SAVE_ICON;
       toggleBtn.style.color = '#a8e6cf';
@@ -1997,12 +1998,14 @@
       editingFileIndex = -1;
       appContainer.classList.remove('is-editing');
       cancelBtn.style.display = 'none';
+      editorEl.style.display = 'none';
+      displayEl.style.display = 'block';
       // Skill 详情页编辑取消，回到详情页
       if (currentTab === 'skills' && viewingSkillId) {
         openSkillDetail(viewingSkillId);
         return;
       }
-      // 日记详情页编辑完回到详情页，不是回到时间轴
+      // 日记详情页编辑取消，回到详情页
       if (currentTab === 'diary' && viewingDiaryIndex >= 0) {
         openDiaryDetail(viewingDiaryIndex);
         return;
