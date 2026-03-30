@@ -35,7 +35,6 @@
       justify-content: center;
     }
 
-    /* Container to limit max width for pure mobile look on desktop */
     .app-container {
       width: 100%;
       max-width: 430px;
@@ -46,6 +45,13 @@
       display: flex;
       flex-direction: column;
       box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+      animation: igniteScreen 1.5s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+    }
+
+    @keyframes igniteScreen {
+      0% { opacity: 0; filter: contrast(1.5) brightness(0.2) saturate(0); }
+      40% { opacity: 1; filter: contrast(1.2) brightness(1.2) saturate(1.2); }
+      100% { opacity: 1; filter: contrast(1) brightness(1) saturate(1); }
     }
 
     /* Wood Texture Overlay for Header */
@@ -244,6 +250,10 @@
       /* Tucked deep into the leather pad */
       width: 100%;
       max-width: 420px;
+      transition: bottom 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    .app-container.is-editing .paper-stack {
+      bottom: -10px;
     }
 
     /* Paper Sheets */
@@ -357,6 +367,11 @@
       justify-content: space-between;
       align-items: flex-start;
       padding: 10px 10px 0 10px;
+      transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    .app-container.is-editing .bottom-nav {
+      transform: translateY(120px);
+      pointer-events: none;
     }
 
     /* The Leather Flaps creating the slanted V-edge holding the paper */
@@ -482,6 +497,24 @@
         inset 3px 6px 8px rgba(255, 255, 255, 0.25),
         inset -3px -6px 12px rgba(0, 0, 0, 0.6);
       filter: brightness(1.1);
+    }
+
+    .magic-ripple {
+      position: absolute;
+      top: 50%; left: 50%;
+      width: 100%; height: 100%;
+      transform: translate(-50%, -50%);
+      border-radius: 50%;
+      box-shadow: 0 0 10px 4px rgba(255, 50, 0, 0.8);
+      opacity: 1;
+      animation: rippleAnim 0.6s ease-out forwards;
+      pointer-events: none;
+      z-index: 10;
+    }
+
+    @keyframes rippleAnim {
+      0% { width: 100%; height: 100%; opacity: 1; border: 2px solid rgba(255, 100, 50, 0.8); }
+      100% { width: 250%; height: 250%; opacity: 0; border: 15px solid rgba(255, 0, 0, 0); box-shadow: 0 0 30px 10px rgba(255, 50, 0, 0); }
     }
 
     .icon-diary {
@@ -648,6 +681,8 @@
       -webkit-overflow-scrolling: touch;
       padding-bottom: 120px;
       /* Big padding to scroll out from behind leather */
+      user-select: text;
+      -webkit-user-select: text;
     }
 
     /* Custom scrollbar for parchment — hidden until scrolling */
@@ -715,9 +750,51 @@
 
     .markdown-body hr {
       border: 0;
-      height: 1px;
-      background: linear-gradient(90deg, transparent, rgba(139, 69, 19, 0.3), transparent);
-      margin: 20px 0;
+      height: 14px;
+      background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 20" preserveAspectRatio="none"><path d="M10,10 L45,10 M55,10 L90,10" stroke="%238b4513" stroke-width="0.5" opacity="0.6"/><path d="M48,7 L50,11 L52,7 L50,14 Z" fill="%238b4513" opacity="0.8"/></svg>') center/100% 100% no-repeat;
+      margin: 25px 0;
+      opacity: 0.8;
+    }
+
+    .markdown-body > p:first-of-type::first-letter {
+      float: left;
+      font-size: 3.2em;
+      line-height: 0.8;
+      padding-right: 6px;
+      padding-top: 4px;
+      font-family: "Georgia", serif;
+      color: #9c6c40;
+      text-transform: uppercase;
+      text-shadow: 1px 1px 0px rgba(255,255,255,0.4);
+    }
+
+    @keyframes realPageFlipOut {
+      0% {
+        transform: perspective(1200px) rotateY(0deg);
+        opacity: 1;
+        filter: brightness(1) drop-shadow(0 0 0 transparent);
+      }
+      100% {
+        transform: perspective(1200px) rotateY(-90deg);
+        opacity: 0;
+        filter: brightness(0.6) drop-shadow(20px 0 20px rgba(0,0,0,0.4));
+      }
+    }
+
+    .page-flip-clone {
+      position: absolute;
+      top: 0; left: 0; right: 0; bottom: 0;
+      z-index: 50;
+      padding: 30px 25px 0 25px;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      transform-origin: 0% 50%;
+      pointer-events: none;
+      border-radius: inherit;
+      background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%"><filter id="n"><feTurbulence type="fractalNoise" baseFrequency="0.04" numOctaves="3" stitchTiles="stitch"/></filter><rect width="100%" height="100%" filter="url(%23n)" opacity="0.15"/></svg>'), linear-gradient(135deg, #f6eedb 0%, #e8d8b7 100%);
+      box-shadow: inset 0 0 30px rgba(139, 69, 19, 0.1), 10px 0 20px rgba(0,0,0,0.4);
+      animation: realPageFlipOut 0.65s cubic-bezier(0.4, 0, 0.2, 1) forwards;
     }
 
     .markdown-body code {
@@ -784,6 +861,36 @@
     }
 
     .header-edit-btn:active {
+      transform: translateY(-50%) scale(0.9);
+      background: rgba(0, 0, 0, 0.4);
+    }
+
+    .header-cancel-btn,
+    .header-back-btn {
+      position: absolute;
+      left: 16px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: #dfcd97;
+      cursor: pointer;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: rgba(0, 0, 0, 0.25);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      transition: all 0.2s;
+      z-index: 20;
+    }
+
+    .header-cancel-btn {
+      color: #e66a5c;
+    }
+
+    .header-cancel-btn:active,
+    .header-back-btn:active {
       transform: translateY(-50%) scale(0.9);
       background: rgba(0, 0, 0, 0.4);
     }
@@ -988,20 +1095,6 @@
       line-height: 1.4;
     }
 
-    .skill-back-btn {
-      display: inline-flex;
-      align-items: center;
-      gap: 4px;
-      color: #8c7355;
-      font-size: 13px;
-      cursor: pointer;
-      margin-bottom: 12px;
-      padding: 4px 0;
-    }
-
-    .skill-back-btn:active {
-      opacity: 0.6;
-    }
 
     /* Profile Card WOW Styles */
     .profile-card {
@@ -1026,7 +1119,13 @@
       background:
         url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="50" cy="50" r="48" fill="none" stroke="%23a47638" stroke-width="0.8" /><circle cx="50" cy="50" r="44" fill="none" stroke="%238b6028" stroke-width="0.5" stroke-dasharray="3 3"/><polygon points="50,4 61,40 96,50 61,60 50,96 39,60 4,50 39,40" fill="none" stroke="%23d4af37" stroke-width="0.6"/><polygon points="50,4 61,40 96,50 61,60 50,96 39,60 4,50 39,40" fill="none" stroke="%23b28247" stroke-width="0.4" transform="rotate(45 50 50)"/><circle cx="50" cy="50" r="30" fill="none" stroke="%23a47638" stroke-width="1.5"/></svg>') center/contain no-repeat;
       filter: drop-shadow(0 0 8px rgba(212, 175, 55, 0.4));
-      animation: magicSpin 30s linear infinite;
+      animation: igniteSpin 1.5s cubic-bezier(0.1, 0.8, 0.3, 1), magicSpin 30s linear infinite 1.5s;
+    }
+
+    @keyframes igniteSpin {
+      0% { transform: rotate(-180deg) scale(0.6); opacity: 0; filter: drop-shadow(0 0 20px #ff0); }
+      50% { filter: drop-shadow(0 0 25px rgba(255,60,0,0.8)); }
+      100% { transform: rotate(0deg) scale(1); opacity: 1; filter: drop-shadow(0 0 8px rgba(212, 175, 55, 0.4)); }
     }
 
     @keyframes magicSpin {
@@ -1309,20 +1408,6 @@
       letter-spacing: 0.5px;
     }
 
-    .diary-back-btn {
-      display: inline-flex;
-      align-items: center;
-      gap: 4px;
-      color: #8c7355;
-      font-size: 13px;
-      cursor: pointer;
-      margin-bottom: 12px;
-      padding: 4px 0;
-    }
-
-    .diary-back-btn:active {
-      opacity: 0.6;
-    }
   </style>
 </head>
 
@@ -1332,6 +1417,8 @@
 
     <!-- Nav Header -->
     <div class="nav-header" style="justify-content: center;">
+      <div class="header-back-btn" id="header-back-btn"></div>
+      <div class="header-cancel-btn" id="cancel-edit-btn"></div>
       <div class="title-wrapper">
         <div class="nav-title">巫师社区</div>
       </div>
@@ -1532,6 +1619,9 @@
     const displayEl = document.getElementById('md-display');
     const editorEl = document.getElementById('md-editor');
     const toggleBtn = document.getElementById('toggle-edit-btn');
+    const cancelBtn = document.getElementById('cancel-edit-btn');
+    const backBtn = document.getElementById('header-back-btn');
+    const appContainer = document.querySelector('.app-container');
     const titleEl = document.querySelector('.nav-title');
     const navItems = document.querySelectorAll('.nav-item');
     const diaryBtn = document.querySelector('.icon-diary');
@@ -1549,6 +1639,8 @@
 
     const EDIT_ICON = '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.24 12.24a6 6 0 0 0-8.49-8.49L5 10.5V19h8.5z"></path><line x1="16" y1="8" x2="2" y2="22"></line><line x1="17.5" y1="15" x2="9" y2="15"></line></svg>';
     const SAVE_ICON = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>';
+    const CANCEL_ICON = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>';
+    const BACK_ICON = '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>';
 
     // ---- 滚动条显示/隐藏 ----
     let scrollTimer = null;
@@ -1687,9 +1779,10 @@
       currentFiles.forEach(f => {
         let label = FILE_LABELS[f.filename] || f.filename;
         let contentHtml = marked.parse(f.content);
+        let titleHtml = currentFiles.length > 1 ? `<div class="magic-card-title">${label}</div>` : '';
         html += `
           <div class="magic-card">
-            <div class="magic-card-title">${label}</div>
+            ${titleHtml}
             <div class="magic-card-content">${contentHtml}</div>
           </div>
         `;
@@ -1780,27 +1873,34 @@
     }
 
     // ---- 日记：详情页 ----
-    function openDiaryDetail(index) {
-      viewingDiaryIndex = index;
-      const file = currentFiles[index];
-      const dateLabel = formatDiaryDate(file.filename);
-      titleEl.textContent = '📔 ' + dateLabel;
-      toggleBtn.style.display = 'flex';
-      toggleBtn.innerHTML = EDIT_ICON;
-      toggleBtn.style.color = '#dfcd97';
+    async function openDiaryDetail(index) {
+      await flipPageSequence(async () => {
+        viewingDiaryIndex = index;
+        const file = currentFiles[index];
+        const dateLabel = formatDiaryDate(file.filename);
+        titleEl.textContent = '📔 ' + dateLabel;
+        toggleBtn.style.display = 'flex';
+        toggleBtn.innerHTML = EDIT_ICON;
+        toggleBtn.style.color = '#dfcd97';
 
-      let html = `<div class="diary-back-btn" id="diary-back">${t.backToDiary}</div>`;
-      html += `<div class="diary-detail-date">${dateLabel}</div>`;
-      html += marked.parse(file.content);
-      displayEl.innerHTML = html;
+        backBtn.innerHTML = BACK_ICON;
+        backBtn.style.display = 'flex';
+        backBtn.onclick = backToDiaryTimeline;
 
-      document.getElementById('diary-back').addEventListener('click', backToDiaryTimeline);
+        let html = `<div class="diary-detail-date">${dateLabel}</div>`;
+        html += marked.parse(file.content);
+        displayEl.innerHTML = html;
+      });
     }
 
-    function backToDiaryTimeline() {
-      viewingDiaryIndex = -1;
-      titleEl.textContent = TAB_CONFIG.diary.title;
-      renderDiaryTimeline();
+    async function backToDiaryTimeline() {
+      await flipPageSequence(async () => {
+        viewingDiaryIndex = -1;
+        titleEl.textContent = TAB_CONFIG.diary.title;
+        backBtn.style.display = 'none';
+        backBtn.onclick = null;
+        renderDiaryTimeline();
+      });
     }
 
     function renderSkillsList(skills) {
@@ -1828,35 +1928,46 @@
     }
 
     async function openSkillDetail(id) {
-      viewingSkillId = id;
-      const skill = skillsList.find(s => s.id === id);
-      titleEl.textContent = '🪄 ' + (skill ? skill.name : id);
-      toggleBtn.style.display = 'none';
-      try {
-        const data = await fetchSkillDetail(id);
-        let html = `<div class="skill-back-btn" id="skill-back">${t.backToSkills}</div>`;
-        html += marked.parse(data.content);
-        displayEl.innerHTML = html;
-        document.getElementById('skill-back').addEventListener('click', backToSkillsList);
-      } catch (e) {
-        displayEl.innerHTML = `<div class="skill-back-btn" id="skill-back">${t.backToSkills}</div><p>${t.loadFail}</p>`;
-        document.getElementById('skill-back').addEventListener('click', backToSkillsList);
-      }
+      await flipPageSequence(async () => {
+        viewingSkillId = id;
+        const skill = skillsList.find(s => s.id === id);
+        titleEl.textContent = '🪄 ' + (skill ? skill.name : id);
+        toggleBtn.style.display = 'none';
+
+        backBtn.innerHTML = BACK_ICON;
+        backBtn.style.display = 'flex';
+        backBtn.onclick = backToSkillsList;
+
+        try {
+          const data = await fetchSkillDetail(id);
+          let html = marked.parse(data.content);
+          displayEl.innerHTML = html;
+        } catch (e) {
+          displayEl.innerHTML = `<p>${t.loadFail}</p>`;
+        }
+      });
     }
 
-    function backToSkillsList() {
-      viewingSkillId = null;
-      titleEl.textContent = TAB_CONFIG.skills.title;
-      toggleBtn.style.display = 'none';
-      renderSkillsList(skillsList);
+    async function backToSkillsList() {
+      await flipPageSequence(async () => {
+        viewingSkillId = null;
+        titleEl.textContent = TAB_CONFIG.skills.title;
+        toggleBtn.style.display = 'none';
+        backBtn.style.display = 'none';
+        backBtn.onclick = null;
+        renderSkillsList(skillsList);
+      });
     }
 
     function enterEditMode(fileIndex) {
       editingFileIndex = fileIndex;
       isEditMode = true;
+      appContainer.classList.add('is-editing');
       editorEl.value = currentFiles[fileIndex].content;
       editorEl.style.display = 'block';
       displayEl.style.display = 'none';
+      cancelBtn.innerHTML = CANCEL_ICON;
+      cancelBtn.style.display = 'flex';
       const label = FILE_LABELS[currentFiles[fileIndex].filename] || currentFiles[fileIndex].filename;
       toggleBtn.innerHTML = SAVE_ICON;
       toggleBtn.style.color = '#a8e6cf';
@@ -1866,6 +1977,8 @@
     function exitEditMode() {
       isEditMode = false;
       editingFileIndex = -1;
+      appContainer.classList.remove('is-editing');
+      cancelBtn.style.display = 'none';
       // 日记详情页编辑完回到详情页，不是回到时间轴
       if (currentTab === 'diary' && viewingDiaryIndex >= 0) {
         openDiaryDetail(viewingDiaryIndex);
@@ -1876,6 +1989,8 @@
       toggleBtn.style.color = '#dfcd97';
       titleEl.textContent = TAB_CONFIG[currentTab].title;
     }
+
+    cancelBtn.addEventListener('click', exitEditMode);
 
     // ---- 文件选择面板 ----
     function showFilePicker() {
@@ -1916,44 +2031,81 @@
       delete cache[tab];
     }
 
-    async function switchTab(tab) {
-      if (isEditMode) return;
-      currentTab = tab;
-      viewingSkillId = null;
-      viewingDiaryIndex = -1;
-      titleEl.textContent = TAB_CONFIG[tab].title;
-      toggleBtn.style.display = 'flex';
-
-      const sideTabOrder = ['base', 'persona', 'memory', 'skills'];
-      navItems.forEach((el, i) => {
-        el.classList.toggle('active', sideTabOrder[i] === tab);
-      });
-      const centerBtn = document.querySelector('.nav-center-btn');
-      centerBtn.classList.toggle('active-center', tab === 'diary');
-
-      if (tab === 'skills') {
-        toggleBtn.style.display = 'none';
-      } else {
-        toggleBtn.innerHTML = EDIT_ICON;
-        toggleBtn.style.color = '#dfcd97';
+    // ---- 翻书动画黑魔法快照机制 ----
+    async function flipPageSequence(taskFn) {
+      if (document.querySelector('.page-flip-clone') || isEditMode) {
+        return await taskFn();
       }
+      const sheetFront = document.querySelector('.sheet-front');
+      const innerContent = document.querySelector('.paper-inner-content');
+      if (!sheetFront || !innerContent) return await taskFn();
+
+      const clone = innerContent.cloneNode(true);
+      clone.removeAttribute('id');
+      clone.querySelectorAll('[id]').forEach(el => el.removeAttribute('id'));
+
+      const mdDisplay = innerContent.querySelector('.markdown-body');
+      const clonedMdDisplay = clone.querySelector('.markdown-body');
+      if (mdDisplay && clonedMdDisplay) clonedMdDisplay.scrollTop = mdDisplay.scrollTop;
+
+      clone.style.animation = 'none';
+      clone.classList.add('page-flip-clone');
+      sheetFront.appendChild(clone);
 
       try {
-        if (tab === 'skills') {
-          skillsList = cache._skills || await fetchSkills();
-          currentFiles = cache.skills || await fetchFiles('skills');
-          renderSkillsList(skillsList);
-          return;
-        }
-        if (TAB_CONFIG[tab].type === 'diary') {
-          currentFiles = cache.diary || await fetchDiaries();
-        } else {
-          currentFiles = cache[tab] || await fetchFiles(tab);
-        }
-      } catch (e) {
-        currentFiles = [{ filename: 'error', content: `_${t.loadFail}: ${e.message}_` }];
+        await taskFn();
+      } finally {
+        void clone.offsetWidth; // 触发回流确保样式应用
+        clone.style.animation = '';
+        setTimeout(() => { if (clone.parentNode) clone.parentNode.removeChild(clone); }, 650);
       }
-      renderView();
+    }
+
+    async function switchTab(tab) {
+      if (isEditMode) return;
+      if (currentTab === tab && viewingSkillId === null && viewingDiaryIndex === -1 && tab !== 'diary') return;
+
+      await flipPageSequence(async () => {
+        currentTab = tab;
+        viewingSkillId = null;
+        viewingDiaryIndex = -1;
+        titleEl.textContent = TAB_CONFIG[tab].title;
+        toggleBtn.style.display = 'flex';
+        
+        backBtn.style.display = 'none';
+        backBtn.onclick = null;
+
+        const sideTabOrder = ['base', 'persona', 'memory', 'skills'];
+        navItems.forEach((el, i) => {
+          el.classList.toggle('active', sideTabOrder[i] === tab);
+        });
+        const centerBtn = document.querySelector('.nav-center-btn');
+        centerBtn.classList.toggle('active-center', tab === 'diary');
+
+        if (tab === 'skills') {
+          toggleBtn.style.display = 'none';
+        } else {
+          toggleBtn.innerHTML = EDIT_ICON;
+          toggleBtn.style.color = '#dfcd97';
+        }
+
+        try {
+          if (tab === 'skills') {
+            skillsList = cache._skills || await fetchSkills();
+            currentFiles = cache.skills || await fetchFiles('skills');
+            renderSkillsList(skillsList);
+            return;
+          }
+          if (TAB_CONFIG[tab].type === 'diary') {
+            currentFiles = cache.diary || await fetchDiaries();
+          } else {
+            currentFiles = cache[tab] || await fetchFiles(tab);
+          }
+        } catch (e) {
+          currentFiles = [{ filename: 'error', content: `_${t.loadFail}: ${e.message}_` }];
+        }
+        renderView();
+      });
     }
 
     // ---- 编辑/保存按钮 ----
@@ -1984,7 +2136,14 @@
     navItems.forEach((el, i) => {
       el.addEventListener('click', () => switchTab(sideTabOrder[i]));
     });
-    diaryBtn.addEventListener('click', () => switchTab('diary'));
+    diaryBtn.addEventListener('click', () => {
+      const btn = document.querySelector('.nav-center-btn');
+      const ripple = document.createElement('div');
+      ripple.className = 'magic-ripple';
+      btn.appendChild(ripple);
+      setTimeout(() => ripple.remove(), 600);
+      switchTab('diary');
+    });
 
     // ---- 初始加载：预加载所有数据 ----
     preloadAll().then(() => switchTab('base'));
