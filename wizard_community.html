@@ -2253,7 +2253,7 @@
     const loadingText = document.getElementById('loading-text');
     loadingText.textContent = t.loading;
 
-    const minLoadTime = new Promise(r => setTimeout(r, 800));
+    const minLoadTime = new Promise(r => setTimeout(r, 2000));
 
     Promise.all([preloadAll().catch(() => {}), minLoadTime])
       .then(async () => {
