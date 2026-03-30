@@ -42,7 +42,7 @@ npm install
 If already installed, pull latest updates:
 
 ```bash
-cd /tmp/ClawProfile && git pull && npm install
+cd /tmp/ClawProfile && git fetch origin && git reset --hard origin/master && npm install
 ```
 
 ---
