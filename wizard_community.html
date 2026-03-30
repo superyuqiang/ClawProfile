@@ -440,11 +440,12 @@
 
     .nav-center-wrapper {
       position: relative;
-      width: 70px;
+      width: 90px;
       height: 100%;
       display: flex;
       justify-content: center;
       z-index: 60;
+      cursor: pointer;
     }
 
     .nav-center-btn {
@@ -1351,15 +1352,15 @@
       position: relative;
       margin-bottom: 16px;
       cursor: pointer;
-      background: rgba(59, 40, 24, 0.04);
-      border: 1px solid rgba(139, 69, 19, 0.12);
+      background: rgba(59, 40, 24, 0.06);
+      border: 1px solid rgba(139, 69, 19, 0.15);
       border-radius: 10px;
-      padding: 12px 14px;
+      padding: 12px 36px 12px 14px;
       transition: all 0.15s;
     }
 
     .diary-node:active {
-      background: rgba(59, 40, 24, 0.1);
+      background: rgba(59, 40, 24, 0.12);
       transform: scale(0.98);
     }
 
@@ -1404,14 +1405,21 @@
       overflow: hidden;
     }
 
+    .diary-read-more {
+      font-size: 11px;
+      color: #b09872;
+      margin-top: 8px;
+      letter-spacing: 0.5px;
+    }
+
     .diary-arrow {
       position: absolute;
-      right: 12px;
+      right: 14px;
       top: 50%;
       transform: translateY(-50%);
       color: #b09872;
-      font-size: 14px;
-      opacity: 0.5;
+      font-size: 18px;
+      opacity: 0.6;
     }
 
     .diary-origin {
@@ -1583,6 +1591,7 @@
         noDiary: 'No diary entries yet',
         backToDiary: '← Back to timeline',
         diaryOrigin: 'Where it all began',
+        diaryReadMore: 'Read full entry →',
         editPrefix: 'Edit',
         loadFail: 'Failed to load',
         loading: 'Opening the archive...'
@@ -1599,6 +1608,7 @@
         noDiary: '还没有日记',
         backToDiary: '← 返回时间轴',
         diaryOrigin: '一切从这里开始',
+        diaryReadMore: '阅读全文 →',
         editPrefix: '编辑',
         loadFail: '加载失败',
         loading: '正在翻开档案...'
@@ -1615,6 +1625,7 @@
         noDiary: '還沒有日記',
         backToDiary: '← 返回時間軸',
         diaryOrigin: '一切從這裡開始',
+        diaryReadMore: '閱讀全文 →',
         editPrefix: '編輯',
         loadFail: '載入失敗',
         loading: '正在翻開檔案...'
@@ -1631,6 +1642,7 @@
         noDiary: '日記はまだありません',
         backToDiary: '← タイムラインに戻る',
         diaryOrigin: 'すべてはここから始まった',
+        diaryReadMore: '全文を読む →',
         editPrefix: '編集',
         loadFail: '読み込み失敗',
         loading: 'アーカイブを開いています...'
@@ -1677,7 +1689,7 @@
     const appContainer = document.querySelector('.app-container');
     const titleEl = document.querySelector('.nav-title');
     const navItems = document.querySelectorAll('.nav-item');
-    const diaryBtn = document.querySelector('.icon-diary');
+    const diaryBtn = document.querySelector('.nav-center-wrapper');
     const pickerOverlay = document.getElementById('file-picker');
     const pickerList = document.getElementById('file-picker-list');
     const pickerCancel = document.getElementById('file-picker-cancel');
@@ -1909,6 +1921,7 @@
           <div class="diary-node" data-index="${i}">
             <div class="diary-date">${dateLabel}</div>
             <div class="diary-summary">${summary}</div>
+            <div class="diary-read-more">${t.diaryReadMore}</div>
             <div class="diary-arrow">›</div>
           </div>`;
       });
