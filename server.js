@@ -153,6 +153,25 @@ app.get('/api/skills/:id', (req, res) => {
   }
 });
 
+// POST /api/skills/:id — 保存单个 skill 的 SKILL.md
+app.post('/api/skills/:id', (req, res) => {
+  const { content } = req.body;
+  if (content === undefined) {
+    return res.status(400).json({ error: 'missing content' });
+  }
+  const skillDir = path.join(WORKSPACE, 'skills', req.params.id);
+  const resolved = path.resolve(skillDir);
+  if (!resolved.startsWith(path.resolve(WORKSPACE))) {
+    return res.status(403).json({ error: 'forbidden' });
+  }
+  try {
+    fs.writeFileSync(path.join(skillDir, 'SKILL.md'), content, 'utf-8');
+    res.json({ ok: true });
+  } catch (e) {
+    res.status(500).json({ error: e.message });
+  }
+});
+
 app.listen(PORT, () => {
   console.log('');
   console.log('  ✨ ClawProfile 已启动');

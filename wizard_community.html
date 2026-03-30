@@ -684,6 +684,10 @@
       user-select: text !important;
       -webkit-user-select: text !important;
     }
+    .markdown-body *, .markdown-body *::before, .markdown-body *::after {
+      user-select: text !important;
+      -webkit-user-select: text !important;
+    }
 
     /* Custom scrollbar for parchment — hidden until scrolling */
     .markdown-body::-webkit-scrollbar {
@@ -1927,12 +1931,25 @@
       });
     }
 
+    let skillDetailContent = '';  // 当前 skill 详情的原始内容
+
+    async function saveSkillDetail(id, content) {
+      const res = await fetch(`${API}/api/skills/${encodeURIComponent(id)}`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ content })
+      });
+      return res.json();
+    }
+
     async function openSkillDetail(id) {
       await flipPageSequence(async () => {
         viewingSkillId = id;
         const skill = skillsList.find(s => s.id === id);
         titleEl.textContent = '🪄 ' + (skill ? skill.name : id);
-        toggleBtn.style.display = 'none';
+        toggleBtn.style.display = 'flex';
+        toggleBtn.innerHTML = EDIT_ICON;
+        toggleBtn.style.color = '#dfcd97';
 
         backBtn.innerHTML = BACK_ICON;
         backBtn.style.display = 'flex';
@@ -1940,9 +1957,10 @@
 
         try {
           const data = await fetchSkillDetail(id);
-          let html = marked.parse(data.content);
-          displayEl.innerHTML = html;
+          skillDetailContent = data.content;
+          displayEl.innerHTML = marked.parse(data.content);
         } catch (e) {
+          skillDetailContent = '';
           displayEl.innerHTML = `<p>${t.loadFail}</p>`;
         }
       });
@@ -1979,6 +1997,11 @@
       editingFileIndex = -1;
       appContainer.classList.remove('is-editing');
       cancelBtn.style.display = 'none';
+      // Skill 详情页编辑取消，回到详情页
+      if (currentTab === 'skills' && viewingSkillId) {
+        openSkillDetail(viewingSkillId);
+        return;
+      }
       // 日记详情页编辑完回到详情页，不是回到时间轴
       if (currentTab === 'diary' && viewingDiaryIndex >= 0) {
         openDiaryDetail(viewingDiaryIndex);
@@ -2111,6 +2134,21 @@
     // ---- 编辑/保存按钮 ----
     toggleBtn.addEventListener('click', async () => {
       if (!isEditMode) {
+        // Skill 详情页：编辑 SKILL.md
+        if (currentTab === 'skills' && viewingSkillId) {
+          isEditMode = true;
+          appContainer.classList.add('is-editing');
+          editorEl.value = skillDetailContent;
+          editorEl.style.display = 'block';
+          displayEl.style.display = 'none';
+          cancelBtn.innerHTML = CANCEL_ICON;
+          cancelBtn.style.display = 'flex';
+          backBtn.style.display = 'none';
+          toggleBtn.innerHTML = SAVE_ICON;
+          toggleBtn.style.color = '#a8e6cf';
+          titleEl.textContent = t.editPrefix + ' · SKILL.md';
+          return;
+        }
         if (currentTab === 'diary' && viewingDiaryIndex >= 0) {
           enterEditMode(viewingDiaryIndex);
           return;
@@ -2121,6 +2159,16 @@
           enterEditMode(0);
         }
       } else {
+        // Skill 详情页保存
+        if (currentTab === 'skills' && viewingSkillId) {
+          skillDetailContent = editorEl.value;
+          await saveSkillDetail(viewingSkillId, skillDetailContent);
+          isEditMode = false;
+          appContainer.classList.remove('is-editing');
+          cancelBtn.style.display = 'none';
+          openSkillDetail(viewingSkillId);
+          return;
+        }
         const file = currentFiles[editingFileIndex];
         file.content = editorEl.value;
         const isDiary = TAB_CONFIG[currentTab].type === 'diary';
