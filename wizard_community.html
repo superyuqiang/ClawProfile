@@ -389,7 +389,7 @@
         url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100"><filter id="noise"><feTurbulence type="fractalNoise" baseFrequency="0.8" numOctaves="4" stitchTiles="stitch"/></filter><rect width="100" height="100" filter="url(%23noise)" opacity="0.12" mix-blend-mode="multiply"/></svg>');
       background-blend-mode: normal;
       border-top: 1.5px solid rgba(130, 95, 65, 0.5);
-      box-shadow: 0 -10px 30px rgba(0, 0, 0, 0.95);
+      box-shadow: 0 -6px 15px rgba(0, 0, 0, 0.5);
       z-index: -1;
     }
 
@@ -1103,6 +1103,42 @@
     }
 
 
+    /* Loading Screen */
+    .loading-screen {
+      position: absolute;
+      top: 0; left: 0; right: 0; bottom: 0;
+      z-index: 200;
+      background: radial-gradient(circle at center, #2a1810 0%, #0d0705 100%);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      transition: opacity 0.5s ease;
+    }
+    .loading-screen.fade-out {
+      opacity: 0;
+      pointer-events: none;
+    }
+    .loading-seal {
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      background: radial-gradient(circle at 35% 35%, #b22222 0%, #8b0000 40%, #5c0000 80%);
+      box-shadow: 0 0 30px rgba(180, 50, 30, 0.3), inset 2px 4px 6px rgba(255,255,255,0.2);
+      animation: sealPulse 1.5s ease-in-out infinite;
+      margin-bottom: 20px;
+    }
+    @keyframes sealPulse {
+      0%, 100% { transform: scale(1); box-shadow: 0 0 20px rgba(180, 50, 30, 0.3); }
+      50% { transform: scale(1.08); box-shadow: 0 0 40px rgba(200, 80, 40, 0.5); }
+    }
+    .loading-text {
+      color: #8c7355;
+      font-size: 13px;
+      letter-spacing: 2px;
+      font-family: "Georgia", serif;
+    }
+
     /* Profile Card WOW Styles */
     .profile-card {
       text-align: center;
@@ -1422,6 +1458,12 @@
 
   <div class="app-container">
 
+    <!-- Loading Screen -->
+    <div class="loading-screen" id="loading-screen">
+      <div class="loading-seal"></div>
+      <div class="loading-text" id="loading-text">Loading...</div>
+    </div>
+
     <!-- Nav Header -->
     <div class="nav-header" style="justify-content: center;">
       <div class="header-back-btn" id="header-back-btn"></div>
@@ -1542,7 +1584,8 @@
         backToDiary: '← Back to timeline',
         diaryOrigin: 'Where it all began',
         editPrefix: 'Edit',
-        loadFail: 'Failed to load'
+        loadFail: 'Failed to load',
+        loading: 'Opening the archive...'
       },
       zh: {
         appTitle: '龙虾档案',
@@ -1557,7 +1600,8 @@
         backToDiary: '← 返回时间轴',
         diaryOrigin: '一切从这里开始',
         editPrefix: '编辑',
-        loadFail: '加载失败'
+        loadFail: '加载失败',
+        loading: '正在翻开档案...'
       },
       'zh-TW': {
         appTitle: '龍蝦檔案',
@@ -1572,7 +1616,8 @@
         backToDiary: '← 返回時間軸',
         diaryOrigin: '一切從這裡開始',
         editPrefix: '編輯',
-        loadFail: '載入失敗'
+        loadFail: '載入失敗',
+        loading: '正在翻開檔案...'
       },
       ja: {
         appTitle: 'ロブスターファイル',
@@ -1587,7 +1632,8 @@
         backToDiary: '← タイムラインに戻る',
         diaryOrigin: 'すべてはここから始まった',
         editPrefix: '編集',
-        loadFail: '読み込み失敗'
+        loadFail: '読み込み失敗',
+        loading: 'アーカイブを開いています...'
       }
     };
 
@@ -2202,7 +2248,16 @@
     });
 
     // ---- 初始加载：预加载所有数据 ----
-    preloadAll().then(() => switchTab('base'));
+    // ---- 初始加载：loading 页面 + 预加载所有数据 ----
+    const loadingScreen = document.getElementById('loading-screen');
+    const loadingText = document.getElementById('loading-text');
+    loadingText.textContent = t.loading;
+
+    preloadAll().then(() => {
+      switchTab('base');
+      loadingScreen.classList.add('fade-out');
+      setTimeout(() => loadingScreen.remove(), 500);
+    });
   </script>
 </body>
 
