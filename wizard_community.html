@@ -1492,11 +1492,329 @@
       font-style: italic;
     }
 
+    /* Diary nav-item: hidden on mobile, shown on PC */
+    .nav-item-diary {
+      display: none;
+    }
+
     .diary-detail-date {
       font-size: 12px;
       color: #8c7355;
       margin-bottom: 12px;
       letter-spacing: 0.5px;
+    }
+
+    /* ============================================
+       PC / Tablet Layout (>= 768px)
+       Left sidebar nav + full-width content area
+       ============================================ */
+    @media (min-width: 768px) {
+
+      body {
+        overflow: hidden;
+        justify-content: flex-start;
+      }
+
+      .app-container {
+        max-width: none;
+        width: calc(100% - 220px);
+        height: 100vh;
+        flex-direction: column;
+        box-shadow: none;
+        margin-left: 220px;
+        animation: none;
+        opacity: 1;
+        filter: none;
+      }
+
+      /* --- Left Sidebar --- */
+      .bottom-nav {
+        position: fixed;
+        top: 0;
+        left: 0;
+        bottom: 0;
+        right: auto;
+        width: 220px;
+        height: 100vh;
+        flex-direction: column;
+        justify-content: flex-start;
+        align-items: stretch;
+        padding: 0;
+        gap: 0;
+        background: linear-gradient(180deg, #1a0f0a 0%, #0d0705 100%);
+        border-right: 1px solid rgba(130, 95, 65, 0.3);
+        z-index: 100;
+        overflow-y: auto;
+      }
+
+      .leather-flap {
+        display: none;
+      }
+
+      /* Brand name at top of sidebar */
+      .bottom-nav::before {
+        content: attr(data-brand);
+        display: block;
+        padding: 32px 20px 28px;
+        font-family: "Georgia", "Times New Roman", serif;
+        font-size: 17px;
+        font-weight: 800;
+        letter-spacing: 2px;
+        background: linear-gradient(to bottom, #fdfbfb 0%, #ebce9b 30%, #a47638 50%, #f6e2af 70%, #8b6028 100%);
+        -webkit-background-clip: text;
+        background-clip: text;
+        -webkit-text-fill-color: transparent;
+        text-align: center;
+        border-bottom: 1px solid rgba(130, 95, 65, 0.2);
+        flex-shrink: 0;
+      }
+
+      /* All nav items become sidebar items */
+      .nav-item {
+        flex: none;
+        text-align: left;
+        padding: 15px 28px;
+        font-size: 14px;
+        letter-spacing: 1.5px;
+        border-radius: 0;
+        transition: background 0.15s, border-color 0.15s;
+        border-left: 3px solid transparent;
+      }
+
+      .nav-item:hover {
+        background: rgba(255, 255, 255, 0.05);
+      }
+
+      .nav-item.active {
+        color: #fff2cc;
+        font-weight: 600;
+        background: rgba(197, 155, 76, 0.1);
+        border-left: 3px solid #c59b4c;
+        text-shadow: 0 0 8px rgba(197, 155, 76, 0.3);
+      }
+
+      .nav-item.active::before {
+        display: none;
+      }
+
+      /* Show diary as normal nav-item on PC */
+      .nav-item-diary {
+        display: block;
+      }
+
+      /* Hide the wax seal center button on PC */
+      .nav-center-wrapper {
+        display: none;
+      }
+
+      /* --- Content Area --- */
+      .main-content {
+        flex: 1;
+        margin: 0;
+        position: relative;
+        min-width: 0;
+        justify-content: stretch;
+      }
+
+      /* Paper fills entire content area */
+      .paper-stack {
+        bottom: 0;
+        left: 0;
+        right: 0;
+        max-width: none;
+        width: 100%;
+      }
+
+      .app-container.is-editing .paper-stack {
+        bottom: 0;
+      }
+
+      /* Simplify paper: single clean sheet */
+      .sheet-2, .sheet-3 {
+        display: none;
+      }
+
+      .sheet-front {
+        border-radius: 0;
+        border-top: none;
+        box-shadow: none;
+        background: #fdf8eb;
+      }
+
+      /* Content padding for desktop readability */
+      .paper-inner-content {
+        padding: 32px 56px 0 56px;
+      }
+
+      /* Disable candle flicker overlay on PC */
+      .paper-inner-content::before {
+        display: none;
+      }
+
+      /* Softer bottom fade on PC */
+      .paper-inner-content::after {
+        height: 60px;
+        background: linear-gradient(0deg, rgba(253, 248, 235, 0.95) 0%, transparent 100%);
+      }
+
+      /* Header */
+      .nav-header {
+        padding: 14px 56px 10px 56px;
+      }
+
+      .search-wrapper {
+        display: none;
+      }
+
+      /* Candles: bottom-left of sidebar */
+      .candles-container {
+        position: fixed;
+        left: 180px;
+        bottom: 12px;
+        right: auto;
+        z-index: 110;
+      }
+
+      /* Edit mode: sidebar stays, no slide-down */
+      .app-container.is-editing .bottom-nav {
+        transform: none;
+        pointer-events: auto;
+      }
+
+      .app-container.is-editing .candles-container {
+        display: block;
+      }
+
+      /* Profile card */
+      .profile-card {
+        padding: 40px 0 30px;
+      }
+
+      .profile-emoji-container {
+        width: 120px;
+        height: 120px;
+      }
+
+      .profile-emoji {
+        font-size: 60px;
+      }
+
+      .profile-name {
+        font-size: 30px;
+      }
+
+      .profile-fields {
+        max-width: 500px;
+      }
+
+      .profile-vibe {
+        max-width: 500px;
+        font-size: 16px;
+      }
+
+      /* Skills grid */
+      .skills-list {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+        gap: 16px;
+      }
+
+      .skill-card:hover {
+        background: rgba(59, 40, 24, 0.1);
+        border-color: rgba(139, 69, 19, 0.35);
+      }
+
+      /* Diary timeline */
+      .diary-timeline {
+        max-width: 700px;
+      }
+
+      .diary-node:hover {
+        background: rgba(59, 40, 24, 0.1);
+        border-color: rgba(139, 69, 19, 0.3);
+      }
+
+      /* Markdown body */
+      .markdown-body {
+        padding-bottom: 80px;
+        font-size: 16px;
+        line-height: 1.7;
+      }
+
+      .markdown-body h1 {
+        font-size: 24px;
+      }
+
+      /* Editor */
+      .markdown-editor {
+        font-size: 15px;
+        line-height: 1.7;
+        padding-bottom: 60px;
+      }
+
+      /* Loading screen covers everything */
+      .loading-screen {
+        position: fixed;
+        left: 0;
+        top: 0;
+        right: 0;
+        bottom: 0;
+      }
+
+      /* File picker */
+      .file-picker-panel {
+        max-width: 400px;
+      }
+
+      /* Page flip */
+      .page-flip-clone {
+        padding: 32px 56px 0 56px;
+      }
+
+      /* Watermark crest: bigger on PC */
+      .crest-container {
+        width: 200px;
+        height: 160px;
+        top: 200px;
+      }
+    }
+
+    /* Extra wide screens */
+    @media (min-width: 1400px) {
+      .bottom-nav {
+        width: 260px;
+      }
+
+      .bottom-nav::before {
+        padding: 36px 24px 32px;
+        font-size: 18px;
+      }
+
+      .app-container {
+        margin-left: 260px;
+        width: calc(100% - 260px);
+      }
+
+      .paper-inner-content {
+        padding: 40px 80px 0 80px;
+      }
+
+      .nav-header {
+        padding: 16px 80px 12px 80px;
+      }
+
+      .nav-item {
+        padding: 16px 32px;
+        font-size: 15px;
+      }
+
+      .candles-container {
+        left: 220px;
+      }
+
+      .markdown-body {
+        font-size: 17px;
+      }
     }
 
   </style>
@@ -1602,6 +1920,7 @@
         <div class="leather-flap flap-right"></div>
         <div class="nav-item">基础</div>
         <div class="nav-item">人设</div>
+        <div class="nav-item nav-item-diary">日记</div>
         <div class="nav-center-wrapper">
           <div class="nav-center-btn">
             <div class="icon-diary">日记</div>
@@ -1741,9 +2060,13 @@
 
     // 应用多语言到 DOM
     titleEl.textContent = t.appTitle;
-    const sideNavLabels = [t.navLabels.base, t.navLabels.persona, t.navLabels.memory, t.navLabels.skills];
-    navItems.forEach((el, i) => { el.textContent = sideNavLabels[i]; });
+    // navItems 顺序: 基础, 人设, 日记(nav-item-diary), 回忆, 技能
+    const allNavLabels = [t.navLabels.base, t.navLabels.persona, t.navLabels.diary, t.navLabels.memory, t.navLabels.skills];
+    const allNavTabs = ['base', 'persona', 'diary', 'memory', 'skills'];
+    navItems.forEach((el, i) => { el.textContent = allNavLabels[i]; });
     document.querySelector('.icon-diary').textContent = t.navLabels.diary;
+    // 侧边栏品牌名（PC 端通过 CSS attr() 读取）
+    document.querySelector('.bottom-nav').setAttribute('data-brand', t.appTitle);
     pickerCancel.textContent = t.cancel;
     document.querySelector('.file-picker-title').textContent = t.pickerTitle;
 
@@ -1795,13 +2118,13 @@
     // ---- 从 markdown 提取 **Key:** Value 字段 ----
     function extractFields(md) {
       const fields = {};
-      // 匹配两种格式：
-      // 1) - **Key:** Value (单行)
+      // 匹配两种格式，支持中英文冒号（: 和 ：）：
+      // 1) - **Key:** Value 或 - **Key：** Value (单行)
       // 2) - **Key:**\n  Value (多行，缩进)
-      const regex = /[-*]\s*\*\*(.+?):\*\*\s*\n?\s*(.+)/g;
+      const regex = /[-*]\s*\*\*(.+?)[：:]?\*\*\s*\n?\s*(.+)/g;
       let m;
       while ((m = regex.exec(md)) !== null) {
-        const key = m[1].trim();
+        const key = m[1].trim().replace(/[：:]$/, '');
         let val = m[2].trim();
         // 跳过未填写的占位符
         if (val.startsWith('_(') || val === '') continue;
@@ -1815,6 +2138,14 @@
       const id = extractFields(identityMd);
       const usr = extractFields(userMd);
 
+      // 多语言 key 查找：按多个别名匹配
+      function findField(fields, ...aliases) {
+        for (const a of aliases) {
+          if (fields[a.toLowerCase()]) return fields[a.toLowerCase()];
+        }
+        return null;
+      }
+
       // 至少要提取到 2 个字段才渲染卡片，否则 fallback
       const totalFields = Object.keys(id).length + Object.keys(usr).length;
       if (totalFields < 2) return null;
@@ -1822,29 +2153,33 @@
       let html = '<div class="profile-card">';
 
       // Emoji
-      if (id.emoji) {
+      const emoji = findField(id, 'emoji', '表情', 'アイコン');
+      if (emoji) {
         html += `
           <div class="profile-emoji-container">
             <div class="profile-magic-circle"></div>
-            <div class="profile-emoji">${id.emoji.val}</div>
+            <div class="profile-emoji">${emoji.val}</div>
           </div>
         `;
       }
 
       // Name
-      if (id.name) {
-        html += `<div class="profile-name">${id.name.val}</div>`;
+      const name = findField(id, 'name', '名字', '名前', '名稱');
+      if (name) {
+        html += `<div class="profile-name">${name.val}</div>`;
       }
 
-      // Creature as Stamp (short) or italic text (long)
-      if (id.creature) {
-        const isLong = id.creature.val.length > 15;
-        html += `<div><div class="profile-creature${isLong ? ' long-text' : ''}">${id.creature.val}</div></div>`;
+      // Creature / Species
+      const creature = findField(id, 'creature', '物种', '物種', '種族', 'species');
+      if (creature) {
+        const isLong = creature.val.length > 15;
+        html += `<div><div class="profile-creature${isLong ? ' long-text' : ''}">${creature.val}</div></div>`;
       }
 
-      // Vibe
-      if (id.vibe) {
-        html += `<div class="profile-vibe">"${id.vibe.val}"</div>`;
+      // Vibe / Personality
+      const vibe = findField(id, 'vibe', '性格', '個性', 'personality');
+      if (vibe) {
+        html += `<div class="profile-vibe">"${vibe.val}"</div>`;
       }
 
       // 分隔线 + User 信息
@@ -2220,7 +2555,7 @@
         backBtn.style.display = 'none';
         backBtn.onclick = null;
 
-        const sideTabOrder = ['base', 'persona', 'memory', 'skills'];
+        const sideTabOrder = allNavTabs; // ['base', 'persona', 'diary', 'memory', 'skills']
         navItems.forEach((el, i) => {
           el.classList.toggle('active', sideTabOrder[i] === tab);
         });
@@ -2302,9 +2637,8 @@
     });
 
     // ---- 导航绑定 ----
-    const sideTabOrder = ['base', 'persona', 'memory', 'skills'];
     navItems.forEach((el, i) => {
-      el.addEventListener('click', () => switchTab(sideTabOrder[i]));
+      el.addEventListener('click', () => switchTab(allNavTabs[i]));
     });
     diaryBtn.addEventListener('click', () => {
       const ripple = document.createElement('div');
